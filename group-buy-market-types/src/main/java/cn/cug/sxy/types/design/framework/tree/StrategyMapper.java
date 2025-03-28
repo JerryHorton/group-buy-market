@@ -9,6 +9,14 @@ package cn.cug.sxy.types.design.framework.tree;
 
 public interface StrategyMapper<T, D, R> {
 
-    StrategyHandler<T, D, R> get(T requestParameter, D dynamicContext);
+    /**
+     * 获取待执行策略
+     *
+     * @param requestParameter 入参
+     * @param dynamicContext   上下文
+     * @return 返参
+     * @throws Exception 异常
+     */
+    StrategyHandler<T, D, R> get(T requestParameter, D dynamicContext) throws Exception;
 
 }

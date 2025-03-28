@@ -1,6 +1,9 @@
 package cn.cug.sxy.domain.activity.service.trial;
 
-import cn.cug.sxy.types.design.framework.tree.AbstractStrategyRouter;
+import cn.cug.sxy.domain.activity.repository.IActivityRepository;
+import cn.cug.sxy.types.design.framework.tree.AbstractMultiThreadStrategyRouter;
+
+import javax.annotation.Resource;
 
 /**
  * @version 1.0
@@ -9,8 +12,15 @@ import cn.cug.sxy.types.design.framework.tree.AbstractStrategyRouter;
  * @Author jerryhotton
  */
 
-public abstract class AbstractGroupBuyMarketSupport<T, D, R> extends AbstractStrategyRouter<T, D, R> {
+public abstract class AbstractGroupBuyMarketSupport<T, D, R> extends AbstractMultiThreadStrategyRouter<T, D, R> {
 
+    protected Long timeout = 500L;
 
+    @Resource
+    protected IActivityRepository activityRepository;
 
+    @Override
+    protected void multiThread(T requestParameter, D dynamicContext) throws Exception {
+        // 缺省方法
+    }
 }

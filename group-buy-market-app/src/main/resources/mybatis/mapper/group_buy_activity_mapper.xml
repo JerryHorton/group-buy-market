@@ -23,6 +23,29 @@
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
+    <select id="queryValidGroupBuyActivity" parameterType="cn.cug.sxy.infrastructure.persistent.po.GroupBuyActivity" resultMap="dataMap">
+        select activity_id,
+               activity_name,
+               source,
+               channel,
+               goods_id,
+               discount_id,
+               group_type,
+               take_limit_count,
+               target_count,
+               valid_time,
+               status,
+               start_time,
+               end_time,
+               tag_id,
+               tag_scope
+        from group_buy_activity
+        where source = #{source}
+          and channel = #{channel}
+        order by id desc
+        limit 1
+    </select>
+
 
 
 </mapper>

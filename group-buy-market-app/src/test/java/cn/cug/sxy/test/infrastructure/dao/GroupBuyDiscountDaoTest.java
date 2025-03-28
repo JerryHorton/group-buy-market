@@ -1,4 +1,4 @@
-package cn.cug.sxy.test.infrastructure;
+package cn.cug.sxy.test.infrastructure.dao;
 
 import cn.cug.sxy.infrastructure.persistent.dao.IGroupBuyDiscountDao;
 import cn.cug.sxy.infrastructure.persistent.po.GroupBuyDiscount;

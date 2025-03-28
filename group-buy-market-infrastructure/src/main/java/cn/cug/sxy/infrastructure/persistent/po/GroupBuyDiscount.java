@@ -21,7 +21,7 @@ public class GroupBuyDiscount {
     /**
      * 折扣ID
      */
-    private Integer discountId;
+    private String discountId;
     /**
      * 折扣标题
      */

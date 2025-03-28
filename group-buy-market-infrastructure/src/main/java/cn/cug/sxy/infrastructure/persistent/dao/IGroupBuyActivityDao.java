@@ -1,5 +1,6 @@
 package cn.cug.sxy.infrastructure.persistent.dao;
 
+import cn.cug.sxy.infrastructure.persistent.po.GroupBuyActivity;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -12,6 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface IGroupBuyActivityDao {
 
-
+    GroupBuyActivity queryValidGroupBuyActivity(GroupBuyActivity groupBuyActivityReq);
 
 }

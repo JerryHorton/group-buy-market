@@ -17,4 +17,6 @@ public interface IGroupBuyDiscountDao {
 
     List<GroupBuyDiscount> queryGroupBuyDiscount();
 
+    GroupBuyDiscount queryGroupBuyDiscountByDiscountId(String discountId);
+
 }
