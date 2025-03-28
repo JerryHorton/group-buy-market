@@ -53,7 +53,7 @@ public class GroupBuyActivity {
     /**
      * 拼团目标人数
      */
-    private Integer target;
+    private Integer targetCount;
     /**
      * 拼团时长（分钟）
      */
