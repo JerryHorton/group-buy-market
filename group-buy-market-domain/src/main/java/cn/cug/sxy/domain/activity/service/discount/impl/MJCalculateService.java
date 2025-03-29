@@ -21,6 +21,7 @@ public class MJCalculateService extends AbstractDiscountCalculateService {
 
     @Override
     protected BigDecimal doCalculate(BigDecimal originalPrice, GroupBuyActivityVO.GroupBuyDiscount groupBuyDiscount) {
+        log.info("优惠策略折扣计算:{}", groupBuyDiscount.getDiscountType().getInfo());
         String marketExpr = groupBuyDiscount.getMarketExpr();
         String[] parts = marketExpr.split(Constants.SPLIT);
         BigDecimal threshold = new BigDecimal(parts[0]);

@@ -2,6 +2,7 @@ package cn.cug.sxy.domain.activity.service.discount.impl;
 
 import cn.cug.sxy.domain.activity.model.valobj.GroupBuyActivityVO;
 import cn.cug.sxy.domain.activity.service.discount.AbstractDiscountCalculateService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -13,11 +14,13 @@ import java.math.BigDecimal;
  * @Author jerryhotton
  */
 
+@Slf4j
 @Service(value = "ZJ")
 public class ZJCalculateService extends AbstractDiscountCalculateService {
 
     @Override
     protected BigDecimal doCalculate(BigDecimal originalPrice, GroupBuyActivityVO.GroupBuyDiscount groupBuyDiscount) {
+        log.info("优惠策略折扣计算:{}", groupBuyDiscount.getDiscountType().getInfo());
         String marketExpr = groupBuyDiscount.getMarketExpr();
         BigDecimal deduction = new BigDecimal(marketExpr);
         BigDecimal deductionPrice = originalPrice.subtract(deduction);

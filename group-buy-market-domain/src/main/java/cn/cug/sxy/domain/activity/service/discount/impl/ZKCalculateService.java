@@ -20,6 +20,7 @@ public class ZKCalculateService extends AbstractDiscountCalculateService {
 
     @Override
     protected BigDecimal doCalculate(BigDecimal originalPrice, GroupBuyActivityVO.GroupBuyDiscount groupBuyDiscount) {
+        log.info("优惠策略折扣计算:{}", groupBuyDiscount.getDiscountType().getInfo());
         String marketExpr = groupBuyDiscount.getMarketExpr();
         BigDecimal discount = new BigDecimal(marketExpr);
         return originalPrice.multiply(discount);
