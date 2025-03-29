@@ -1,7 +1,8 @@
-package cn.cug.sxy.domain.activity.service.trial;
+package cn.cug.sxy.domain.activity.service.trial.impl;
 
 import cn.cug.sxy.domain.activity.model.entity.MarketProductEntity;
 import cn.cug.sxy.domain.activity.model.entity.TrialBalanceEntity;
+import cn.cug.sxy.domain.activity.service.trial.IIndexGroupBuyMarketService;
 import cn.cug.sxy.domain.activity.service.trial.factory.DefaultActivityStrategyFactory;
 import cn.cug.sxy.types.design.framework.tree.StrategyHandler;
 import org.springframework.stereotype.Service;

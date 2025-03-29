@@ -2,7 +2,7 @@ package cn.cug.sxy.test.domain.activity;
 
 import cn.cug.sxy.domain.activity.model.entity.MarketProductEntity;
 import cn.cug.sxy.domain.activity.model.entity.TrialBalanceEntity;
-import cn.cug.sxy.domain.activity.service.trial.IndexGroupBuyMarketService;
+import cn.cug.sxy.domain.activity.service.trial.impl.IndexGroupBuyMarketService;
 import com.alibaba.fastjson2.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;

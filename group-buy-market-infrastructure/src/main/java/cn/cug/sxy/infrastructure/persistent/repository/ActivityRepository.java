@@ -1,5 +1,6 @@
 package cn.cug.sxy.infrastructure.persistent.repository;
 
+import cn.cug.sxy.domain.activity.model.valobj.DiscountTypeVO;
 import cn.cug.sxy.domain.activity.model.valobj.GroupBuyActivityVO;
 import cn.cug.sxy.domain.activity.model.valobj.SkuVO;
 import cn.cug.sxy.domain.activity.repository.IActivityRepository;
@@ -57,7 +58,7 @@ public class ActivityRepository implements IActivityRepository {
                 .groupBuyDiscount(GroupBuyActivityVO.GroupBuyDiscount.builder()
                         .discountName(groupBuyDiscount.getDiscountName())
                         .discountDesc(groupBuyDiscount.getDiscountDesc())
-                        .discountType(groupBuyDiscount.getDiscountType())
+                        .discountType(DiscountTypeVO.get(groupBuyDiscount.getDiscountType()))
                         .marketPlan(groupBuyDiscount.getMarketPlan())
                         .marketExpr(groupBuyDiscount.getMarketExpr())
                         .tagId(groupBuyDiscount.getTagId())
