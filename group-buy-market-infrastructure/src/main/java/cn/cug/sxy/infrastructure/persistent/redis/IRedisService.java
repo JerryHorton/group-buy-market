@@ -2,6 +2,10 @@ package cn.cug.sxy.infrastructure.persistent.redis;
 
 import org.redisson.api.*;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -255,5 +259,20 @@ public interface IRedisService {
     Boolean setNx(String key);
 
     boolean setNx(String key, long expire, TimeUnit timeUnit);
+
+    RBitSet getBitSet(String key);
+
+    default int getIndexFromUserId(String userId) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] hashBytes = md.digest(userId.getBytes(StandardCharsets.UTF_8));
+            // 将哈希字节数组转换为正整数
+            BigInteger bigInt = new BigInteger(1, hashBytes);
+            // 取模以确保索引在合理范围内
+            return bigInt.mod(BigInteger.valueOf(Integer.MAX_VALUE)).intValue();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("MD5 algorithm not found", e);
+        }
+    }
 
 }

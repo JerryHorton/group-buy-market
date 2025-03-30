@@ -174,4 +174,9 @@ public class RedissonService implements IRedisService {
         return redissonClient.getBucket(key).trySet("lock", expire, timeUnit);
     }
 
+    @Override
+    public RBitSet getBitSet(String key) {
+        return redissonClient.getBitSet(key);
+    }
+
 }
