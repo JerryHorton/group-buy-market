@@ -12,7 +12,7 @@ import cn.cug.sxy.domain.activity.model.valobj.SkuVO;
 
 public interface IActivityRepository {
 
-    GroupBuyActivityVO queryGroupBuyActivityVO(String source, String channel);
+    GroupBuyActivityVO queryGroupBuyActivityVO(String source, String channel, String goodsId);
 
     SkuVO querySkuVOByGoodsId(String goodsId);
 

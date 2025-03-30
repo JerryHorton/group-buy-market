@@ -43,9 +43,12 @@ public class MarketNode extends AbstractGroupBuyMarketSupport<MarketProductEntit
     @Resource
     private EndNode endNode;
 
+    @Resource
+    private ErrorNode errorNode;
+
     @Override
     protected void multiThread(MarketProductEntity requestParameter, DefaultActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
-        QueryGroupBuyActivityVOThreadTask queryGroupBuyActivityVOThreadTask = new QueryGroupBuyActivityVOThreadTask(requestParameter.getSource(), requestParameter.getChannel(), activityRepository);
+        QueryGroupBuyActivityVOThreadTask queryGroupBuyActivityVOThreadTask = new QueryGroupBuyActivityVOThreadTask(requestParameter.getSource(), requestParameter.getChannel(), requestParameter.getGoodsId(), activityRepository);
         FutureTask<GroupBuyActivityVO> groupBuyActivityVOFutureTask = new FutureTask<>(queryGroupBuyActivityVOThreadTask);
         threadPoolExecutor.execute(groupBuyActivityVOFutureTask);
 
@@ -61,8 +64,13 @@ public class MarketNode extends AbstractGroupBuyMarketSupport<MarketProductEntit
     @Override
     protected TrialBalanceEntity doApply(MarketProductEntity requestParameter, DefaultActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
         log.info("拼团商品查询试算服务-MarketNode userId:{} requestParameter:{}", requestParameter.getUserId(), JSON.toJSONString(requestParameter));
-        GroupBuyActivityVO.GroupBuyDiscount groupBuyDiscount = dynamicContext.getGroupBuyActivityVO().getGroupBuyDiscount();
+        // 获取上下文数据
+        GroupBuyActivityVO groupBuyActivityVO = dynamicContext.getGroupBuyActivityVO();
         SkuVO skuVO = dynamicContext.getSkuVO();
+        if (null == groupBuyActivityVO || null == skuVO) {
+            return router(requestParameter, dynamicContext);
+        }
+        GroupBuyActivityVO.GroupBuyDiscount groupBuyDiscount = groupBuyActivityVO.getGroupBuyDiscount();
         String marketPlan = groupBuyDiscount.getMarketPlan();
         IDiscountCalculateService discountCalculateService = discountCalculateServiceMap.get(marketPlan);
         if (null == discountCalculateService) {
@@ -76,6 +84,9 @@ public class MarketNode extends AbstractGroupBuyMarketSupport<MarketProductEntit
 
     @Override
     public StrategyHandler<MarketProductEntity, DefaultActivityStrategyFactory.DynamicContext, TrialBalanceEntity> get(MarketProductEntity requestParameter, DefaultActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
+        if (null == dynamicContext.getGroupBuyActivityVO() || null == dynamicContext.getSkuVO()) {
+            return errorNode;
+        }
         return endNode;
     }
 

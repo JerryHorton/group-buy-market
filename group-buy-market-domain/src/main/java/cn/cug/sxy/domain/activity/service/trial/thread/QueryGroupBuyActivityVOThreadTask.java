@@ -18,17 +18,20 @@ public class QueryGroupBuyActivityVOThreadTask implements Callable<GroupBuyActiv
 
     private final String channel;
 
+    private final String groupId;
+
     private final IActivityRepository activityRepository;
 
-    public QueryGroupBuyActivityVOThreadTask(String source, String channel, IActivityRepository activityRepository) {
+    public QueryGroupBuyActivityVOThreadTask(String source, String channel, String groupId, IActivityRepository activityRepository) {
         this.source = source;
         this.channel = channel;
+        this.groupId = groupId;
         this.activityRepository = activityRepository;
     }
 
     @Override
     public GroupBuyActivityVO call() throws Exception {
-        return activityRepository.queryGroupBuyActivityVO(source, channel);
+        return activityRepository.queryGroupBuyActivityVO(source, channel, groupId);
     }
 
 }
