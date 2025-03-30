@@ -3,19 +3,20 @@ package cn.cug.sxy.infrastructure.persistent.repository;
 import cn.cug.sxy.domain.activity.model.valobj.DiscountTypeVO;
 import cn.cug.sxy.domain.activity.model.valobj.GroupBuyActivityVO;
 import cn.cug.sxy.domain.activity.model.valobj.SkuVO;
+import cn.cug.sxy.domain.activity.model.valobj.TagScopeVO;
 import cn.cug.sxy.domain.activity.repository.IActivityRepository;
-import cn.cug.sxy.infrastructure.persistent.dao.IGroupBuyActivityDao;
-import cn.cug.sxy.infrastructure.persistent.dao.IGroupBuyDiscountDao;
-import cn.cug.sxy.infrastructure.persistent.dao.ISCSkuActivityDao;
-import cn.cug.sxy.infrastructure.persistent.dao.ISkuDao;
-import cn.cug.sxy.infrastructure.persistent.po.GroupBuyActivity;
-import cn.cug.sxy.infrastructure.persistent.po.GroupBuyDiscount;
-import cn.cug.sxy.infrastructure.persistent.po.SCSkuActivity;
-import cn.cug.sxy.infrastructure.persistent.po.Sku;
+import cn.cug.sxy.infrastructure.persistent.dao.*;
+import cn.cug.sxy.infrastructure.persistent.po.*;
+import cn.cug.sxy.infrastructure.persistent.redis.IRedisService;
+import cn.cug.sxy.types.common.Constants;
+import org.redisson.api.RBitSet;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @version 1.0
@@ -28,6 +29,9 @@ import javax.annotation.Resource;
 public class ActivityRepository implements IActivityRepository {
 
     @Resource
+    private IRedisService redisService;
+
+    @Resource
     private IGroupBuyActivityDao groupBuyActivityDao;
 
     @Resource
@@ -35,6 +39,9 @@ public class ActivityRepository implements IActivityRepository {
 
     @Resource
     private ISCSkuActivityDao sCSkuActivityDao;
+
+    @Resource
+    private IActivityTagConfigDao activityTagConfigDao;
 
     @Resource
     private ISkuDao skuDao;
@@ -46,17 +53,25 @@ public class ActivityRepository implements IActivityRepository {
         scSkuActivityReq.setChannel(channel);
         scSkuActivityReq.setGoodsId(goodsId);
         SCSkuActivity scSkuActivityRes = sCSkuActivityDao.querySCSkuActivity(scSkuActivityReq);
+
         if (null == scSkuActivityRes) {
             return null;
         }
+
         GroupBuyActivity groupBuyActivityRes = groupBuyActivityDao.queryValidGroupBuyActivityByActivityId(scSkuActivityRes.getActivityId());
         if (null == groupBuyActivityRes) {
             return null;
         }
+
         GroupBuyDiscount groupBuyDiscount = groupBuyDiscountDao.queryGroupBuyDiscountByDiscountId(groupBuyActivityRes.getDiscountId());
         if (null == groupBuyDiscount) {
             return null;
         }
+
+        List<ActivityTagsConfig> activityTagsConfigEntityList = activityTagConfigDao.queryActivityTagConfig(groupBuyActivityRes.getActivityId());
+        Map<String, String> tagsConfigMap = activityTagsConfigEntityList.stream()
+                .collect(Collectors.toMap(ActivityTagsConfig::getTagId, ActivityTagsConfig::getTagScope));
+
         return GroupBuyActivityVO.builder()
                 .activityId(scSkuActivityRes.getActivityId())
                 .activityName(groupBuyActivityRes.getActivityName())
@@ -70,8 +85,7 @@ public class ActivityRepository implements IActivityRepository {
                 .status(groupBuyActivityRes.getStatus())
                 .startTime(groupBuyActivityRes.getStartTime())
                 .endTime(groupBuyActivityRes.getEndTime())
-                .tagId(groupBuyActivityRes.getTagId())
-                .tagScope(groupBuyActivityRes.getTagScope())
+                .tagsConfig(tagsConfigMap)
                 .groupBuyDiscount(GroupBuyActivityVO.GroupBuyDiscount.builder()
                         .discountName(groupBuyDiscount.getDiscountName())
                         .discountDesc(groupBuyDiscount.getDiscountDesc())
@@ -95,6 +109,25 @@ public class ActivityRepository implements IActivityRepository {
                 .goodsName(sku.getGoodsName())
                 .originalPrice(sku.getOriginalPrice())
                 .build();
+    }
+
+    @Override
+    public Map<String, Boolean> IsWithinCrowdTagRangeAndScope(Map<String, String> tagsConfigMap, String userId) {
+        Map<String, Boolean> isWithin = new HashMap<String, Boolean>() {{
+            put(TagScopeVO.VISIBLE.getCode(), false);
+            put(TagScopeVO.ENABLE.getCode(), false);
+        }};
+        for (String tagId : tagsConfigMap.keySet()) {
+            RBitSet bitSet = redisService.getBitSet(tagId);
+            if (bitSet.get(redisService.getIndexFromUserId(userId))) {
+                String tagScope = tagsConfigMap.get(tagId);
+                String[] split = tagScope.split(Constants.SPLIT);
+                isWithin.put(TagScopeVO.VISIBLE.getCode(), "1".equals(split[0]));
+                isWithin.put(TagScopeVO.ENABLE.getCode(), split.length == 2 && "2".equals(split[1]));
+                break;
+            }
+        }
+        return isWithin;
     }
 
 }

@@ -31,7 +31,7 @@ public class IndexGroupBuyMarketTest {
     public void test_indexMarketTrial() throws Exception {
 
         TrialBalanceEntity trialBalanceEntity = indexGroupBuyMarketService.indexMarketTrial(MarketProductEntity.builder()
-                .userId("user001")
+                .userId("user004")
                 .goodsId("10001")
                 .source("SOURCE_001")
                 .channel("CHANNEL_001")

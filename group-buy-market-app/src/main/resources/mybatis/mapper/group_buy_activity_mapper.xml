@@ -30,12 +30,9 @@
                valid_time,
                status,
                start_time,
-               end_time,
-               tag_id,
-               tag_scope
+               end_time
         from group_buy_activity
         where activity_id = #{activityId}
-          and status = 1
     </select>
 
 

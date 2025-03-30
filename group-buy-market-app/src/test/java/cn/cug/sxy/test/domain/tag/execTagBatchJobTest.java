@@ -31,12 +31,12 @@ public class execTagBatchJobTest {
 
     @Test
     public void test_execTagBatchJob() {
-        tagService.execTagBatchJob("RQ_KJHKL98UU78H66554GFDV", "0001");
+        tagService.execTagBatchJob("TAG_0002", "0002");
     }
 
     @Test
     public void test_get_tag_bitmap() {
-        RBitSet bitSet = redisService.getBitSet("RQ_KJHKL98UU78H66554GFDV");
+        RBitSet bitSet = redisService.getBitSet("TAG_0002");
         log.info("测试结果:{}", bitSet.get(redisService.getIndexFromUserId("user001")));
         log.info("测试结果:{}", bitSet.get(redisService.getIndexFromUserId("user003")));
     }

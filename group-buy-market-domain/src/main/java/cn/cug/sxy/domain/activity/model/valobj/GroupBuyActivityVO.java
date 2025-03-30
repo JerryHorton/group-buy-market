@@ -3,6 +3,7 @@ package cn.cug.sxy.domain.activity.model.valobj;
 import lombok.*;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @version 1.0
@@ -70,13 +71,9 @@ public class GroupBuyActivityVO {
      */
     private Date endTime;
     /**
-     * 人群标签规则标识
+     * 人群标签配置
      */
-    private String tagId;
-    /**
-     * 人群标签规则范围
-     */
-    private String tagScope;
+    private Map<String, String> tagsConfig;
 
     @Getter
     @Builder

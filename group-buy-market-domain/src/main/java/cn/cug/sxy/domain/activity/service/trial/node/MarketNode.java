@@ -7,8 +7,6 @@ import cn.cug.sxy.domain.activity.model.valobj.SkuVO;
 import cn.cug.sxy.domain.activity.service.discount.IDiscountCalculateService;
 import cn.cug.sxy.domain.activity.service.trial.AbstractGroupBuyMarketSupport;
 import cn.cug.sxy.domain.activity.service.trial.factory.DefaultActivityStrategyFactory;
-import cn.cug.sxy.domain.activity.service.trial.thread.QueryGroupBuyActivityVOThreadTask;
-import cn.cug.sxy.domain.activity.service.trial.thread.QuerySkuVOThreadTask;
 import cn.cug.sxy.types.design.framework.tree.StrategyHandler;
 import cn.cug.sxy.types.enums.ResponseCode;
 import cn.cug.sxy.types.exception.AppException;
@@ -19,9 +17,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Map;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @version 1.0
@@ -35,31 +30,10 @@ import java.util.concurrent.TimeUnit;
 public class MarketNode extends AbstractGroupBuyMarketSupport<MarketProductEntity, DefaultActivityStrategyFactory.DynamicContext, TrialBalanceEntity> {
 
     @Resource
-    private ThreadPoolExecutor threadPoolExecutor;
-
-    @Resource
     private Map<String, IDiscountCalculateService> discountCalculateServiceMap;
 
     @Resource
     private EndNode endNode;
-
-    @Resource
-    private ErrorNode errorNode;
-
-    @Override
-    protected void multiThread(MarketProductEntity requestParameter, DefaultActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
-        QueryGroupBuyActivityVOThreadTask queryGroupBuyActivityVOThreadTask = new QueryGroupBuyActivityVOThreadTask(requestParameter.getSource(), requestParameter.getChannel(), requestParameter.getGoodsId(), activityRepository);
-        FutureTask<GroupBuyActivityVO> groupBuyActivityVOFutureTask = new FutureTask<>(queryGroupBuyActivityVOThreadTask);
-        threadPoolExecutor.execute(groupBuyActivityVOFutureTask);
-
-        QuerySkuVOThreadTask querySkuVOThreadTask = new QuerySkuVOThreadTask(requestParameter.getGoodsId(), activityRepository);
-        FutureTask<SkuVO> skuVOFutureTask = new FutureTask<>(querySkuVOThreadTask);
-        threadPoolExecutor.execute(skuVOFutureTask);
-
-        dynamicContext.setGroupBuyActivityVO(groupBuyActivityVOFutureTask.get(timeout, TimeUnit.MINUTES));
-        dynamicContext.setSkuVO(skuVOFutureTask.get(timeout, TimeUnit.MINUTES));
-        log.info("拼团商品查询试算服务-MarketNode userId:{} 异步线程加载数据「GroupBuyActivityDiscountVO、SkuVO」完成", requestParameter.getUserId());
-    }
 
     @Override
     protected TrialBalanceEntity doApply(MarketProductEntity requestParameter, DefaultActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
@@ -67,9 +41,6 @@ public class MarketNode extends AbstractGroupBuyMarketSupport<MarketProductEntit
         // 获取上下文数据
         GroupBuyActivityVO groupBuyActivityVO = dynamicContext.getGroupBuyActivityVO();
         SkuVO skuVO = dynamicContext.getSkuVO();
-        if (null == groupBuyActivityVO || null == skuVO) {
-            return router(requestParameter, dynamicContext);
-        }
         GroupBuyActivityVO.GroupBuyDiscount groupBuyDiscount = groupBuyActivityVO.getGroupBuyDiscount();
         String marketPlan = groupBuyDiscount.getMarketPlan();
         IDiscountCalculateService discountCalculateService = discountCalculateServiceMap.get(marketPlan);
@@ -84,9 +55,6 @@ public class MarketNode extends AbstractGroupBuyMarketSupport<MarketProductEntit
 
     @Override
     public StrategyHandler<MarketProductEntity, DefaultActivityStrategyFactory.DynamicContext, TrialBalanceEntity> get(MarketProductEntity requestParameter, DefaultActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
-        if (null == dynamicContext.getGroupBuyActivityVO() || null == dynamicContext.getSkuVO()) {
-            return errorNode;
-        }
         return endNode;
     }
 

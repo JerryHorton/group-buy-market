@@ -53,6 +53,14 @@ public class DefaultActivityStrategyFactory {
          * 优惠后金额
          */
         private BigDecimal deductionPrice;
+        /**
+         * 是否可见拼团
+         */
+        private Boolean isVisible;
+        /**
+         * 是否可参与拼团
+         */
+        private Boolean isEnable;
 
     }
 

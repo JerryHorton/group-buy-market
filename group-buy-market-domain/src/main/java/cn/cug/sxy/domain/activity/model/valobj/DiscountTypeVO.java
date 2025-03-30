@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 /**
  * @version 1.0
  * @Date 2025/3/29 13:47
- * @Description
+ * @Description 折扣优惠类型 枚举
  * @Author jerryhotton
  */
 
