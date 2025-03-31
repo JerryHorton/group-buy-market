@@ -6,6 +6,7 @@ import cn.cug.sxy.domain.activity.model.valobj.SkuVO;
 import cn.cug.sxy.domain.activity.model.valobj.TagScopeVO;
 import cn.cug.sxy.domain.activity.repository.IActivityRepository;
 import cn.cug.sxy.infrastructure.persistent.dao.*;
+import cn.cug.sxy.infrastructure.persistent.dcc.IDCCService;
 import cn.cug.sxy.infrastructure.persistent.po.*;
 import cn.cug.sxy.infrastructure.persistent.redis.IRedisService;
 import cn.cug.sxy.types.common.Constants;
@@ -30,6 +31,9 @@ public class ActivityRepository implements IActivityRepository {
 
     @Resource
     private IRedisService redisService;
+
+    @Resource
+    private IDCCService dccService;
 
     @Resource
     private IGroupBuyActivityDao groupBuyActivityDao;
@@ -128,6 +132,16 @@ public class ActivityRepository implements IActivityRepository {
             }
         }
         return isWithin;
+    }
+
+    @Override
+    public boolean degradeSwitch() {
+        return dccService.isDegradeSwitch();
+    }
+
+    @Override
+    public boolean cutRange(String userId) {
+        return dccService.isCutRange(userId);
     }
 
 }

@@ -20,4 +20,8 @@ public interface IActivityRepository {
 
     Map<String, Boolean> IsWithinCrowdTagRangeAndScope(Map<String, String> tagsConfigMap, String userId);
 
+    boolean degradeSwitch();
+
+    boolean cutRange(String userId);
+
 }
