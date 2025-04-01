@@ -1,6 +1,7 @@
 package cn.cug.sxy.domain.activity.service.discount;
 
 import cn.cug.sxy.domain.activity.model.valobj.GroupBuyActivityVO;
+import cn.cug.sxy.domain.activity.service.trial.factory.DefaultActivityStrategyFactory;
 
 import java.math.BigDecimal;
 
@@ -13,6 +14,6 @@ import java.math.BigDecimal;
 
 public interface IDiscountCalculateService {
 
-    BigDecimal calculate(String userId, BigDecimal originalPrice, GroupBuyActivityVO.GroupBuyDiscount groupBuyDiscount);
+    BigDecimal calculate(String userId, BigDecimal originalPrice, DefaultActivityStrategyFactory.DynamicContext dynamicContext);
 
 }

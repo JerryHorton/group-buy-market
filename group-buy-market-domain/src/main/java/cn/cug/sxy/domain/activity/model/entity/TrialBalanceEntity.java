@@ -1,5 +1,6 @@
 package cn.cug.sxy.domain.activity.model.entity;
 
+import cn.cug.sxy.domain.activity.model.valobj.GroupBuyActivityVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -57,5 +58,9 @@ public class TrialBalanceEntity {
      * 是否可参与拼团
      */
     private Boolean isEnable;
+    /**
+     * 拼团活动值对象
+     */
+    private GroupBuyActivityVO groupBuyActivityVO;
 
 }

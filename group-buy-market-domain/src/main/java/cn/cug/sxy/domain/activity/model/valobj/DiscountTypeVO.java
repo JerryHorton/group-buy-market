@@ -30,7 +30,7 @@ public enum DiscountTypeVO {
             case 1:
                 return TAG;
             default:
-                throw new RuntimeException("error code:" + code);
+                throw new RuntimeException("error DiscountType code:" + code);
         }
     }
 

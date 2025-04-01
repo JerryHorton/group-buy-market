@@ -3,6 +3,7 @@ package cn.cug.sxy.domain.activity.service.discount;
 import cn.cug.sxy.domain.activity.model.valobj.DiscountTypeVO;
 import cn.cug.sxy.domain.activity.model.valobj.GroupBuyActivityVO;
 import cn.cug.sxy.domain.activity.repository.IActivityRepository;
+import cn.cug.sxy.domain.activity.service.trial.factory.DefaultActivityStrategyFactory;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -16,13 +17,12 @@ import java.math.BigDecimal;
 
 public abstract class AbstractDiscountCalculateService implements IDiscountCalculateService {
 
-    @Resource
-    protected IActivityRepository activityRepository;
-
     @Override
-    public BigDecimal calculate(String userId, BigDecimal originalPrice, GroupBuyActivityVO.GroupBuyDiscount groupBuyDiscount) {
+    public BigDecimal calculate(String userId, BigDecimal originalPrice, DefaultActivityStrategyFactory.DynamicContext dynamicContext) {
+        GroupBuyActivityVO.GroupBuyDiscount groupBuyDiscount = dynamicContext.getGroupBuyActivityVO().getGroupBuyDiscount();
+        // 若为人群标签型优惠
         if (DiscountTypeVO.TAG.equals(groupBuyDiscount.getDiscountType())) {
-            boolean isCrowdRange = filterTagId(userId, groupBuyDiscount.getTagId());
+            boolean isCrowdRange = filterTagId(dynamicContext);
             if (!isCrowdRange) {
                 return originalPrice;
             }
@@ -30,9 +30,8 @@ public abstract class AbstractDiscountCalculateService implements IDiscountCalcu
         return doCalculate(originalPrice, groupBuyDiscount);
     }
 
-    private boolean filterTagId(String userId, String tagId) {
-        // todo 后续实现
-        return true;
+    private boolean filterTagId(DefaultActivityStrategyFactory.DynamicContext dynamicContext) {
+        return dynamicContext.getIsVisible();
     }
 
     protected BigDecimal validPrice(BigDecimal deductionPrice) {

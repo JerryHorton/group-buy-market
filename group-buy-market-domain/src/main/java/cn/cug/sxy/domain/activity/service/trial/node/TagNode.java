@@ -2,6 +2,7 @@ package cn.cug.sxy.domain.activity.service.trial.node;
 
 import cn.cug.sxy.domain.activity.model.entity.MarketProductEntity;
 import cn.cug.sxy.domain.activity.model.entity.TrialBalanceEntity;
+import cn.cug.sxy.domain.activity.model.valobj.DiscountTypeVO;
 import cn.cug.sxy.domain.activity.model.valobj.GroupBuyActivityVO;
 import cn.cug.sxy.domain.activity.model.valobj.SkuVO;
 import cn.cug.sxy.domain.activity.model.valobj.TagScopeVO;
@@ -67,6 +68,12 @@ public class TagNode extends AbstractGroupBuyMarketSupport<MarketProductEntity, 
         if (null == groupBuyActivityVO || null == skuVO) {
             return router(requestParameter, dynamicContext);
         }
+        // 折扣类型非人群标签型
+        if (!DiscountTypeVO.TAG.equals(groupBuyActivityVO.getGroupBuyDiscount().getDiscountType())) {
+            dynamicContext.setIsVisible(TagScopeVO.VISIBLE.getAllow());
+            dynamicContext.setIsEnable(TagScopeVO.ENABLE.getAllow());
+            return router(requestParameter, dynamicContext);
+        }
         Map<String, String> tagsConfigMap = groupBuyActivityVO.getTagsConfig();
         // 人群标签配置为空，不做人群限制
         if (null == tagsConfigMap) {
@@ -84,9 +91,6 @@ public class TagNode extends AbstractGroupBuyMarketSupport<MarketProductEntity, 
     public StrategyHandler<MarketProductEntity, DefaultActivityStrategyFactory.DynamicContext, TrialBalanceEntity> get(MarketProductEntity requestParameter, DefaultActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
         if (null == dynamicContext.getGroupBuyActivityVO() || null == dynamicContext.getSkuVO()) {
             return errorNode;
-        }
-        if (!dynamicContext.getIsVisible()) {
-            return endNode;
         }
         return marketNode;
     }
