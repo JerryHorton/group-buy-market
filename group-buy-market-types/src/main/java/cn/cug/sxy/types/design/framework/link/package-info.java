@@ -5,4 +5,4 @@
  * @Author jerryhotton
  */
 
-package cn.cug.sxy.types.design.framework.chain;
+package cn.cug.sxy.types.design.framework.link;
