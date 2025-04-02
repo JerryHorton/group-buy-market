@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -23,11 +22,11 @@ import java.math.BigDecimal;
  */
 
 @Service
-public class DefaultActivityStrategyFactory {
+public class ActivityStrategyFactory {
 
     private final RootNode rootNode;
 
-    public DefaultActivityStrategyFactory(RootNode rootNode) {
+    public ActivityStrategyFactory(RootNode rootNode) {
         this.rootNode = rootNode;
     }
 
@@ -50,9 +49,9 @@ public class DefaultActivityStrategyFactory {
          */
         private SkuVO skuVO;
         /**
-         * 优惠后金额
+         * 优惠后的最终价格
          */
-        private BigDecimal deductionPrice;
+        private BigDecimal finalPrice;
         /**
          * 是否可见拼团
          */

@@ -1,5 +1,6 @@
 package cn.cug.sxy.types.exception;
 
+import cn.cug.sxy.types.enums.ResponseCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,6 +18,11 @@ public class AppException extends RuntimeException {
 
     public AppException(String code) {
         this.code = code;
+    }
+
+    public AppException(ResponseCode code) {
+        this.code = code.getCode();
+        this.info = code.getInfo();
     }
 
     public AppException(String code, Throwable cause) {

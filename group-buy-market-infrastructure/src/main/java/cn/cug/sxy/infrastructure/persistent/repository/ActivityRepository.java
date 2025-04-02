@@ -62,7 +62,7 @@ public class ActivityRepository implements IActivityRepository {
             return null;
         }
 
-        GroupBuyActivity groupBuyActivityRes = groupBuyActivityDao.queryValidGroupBuyActivityByActivityId(scSkuActivityRes.getActivityId());
+        GroupBuyActivity groupBuyActivityRes = groupBuyActivityDao.queryGroupBuyActivityByActivityId(scSkuActivityRes.getActivityId());
         if (null == groupBuyActivityRes) {
             return null;
         }

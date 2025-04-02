@@ -21,7 +21,6 @@ public class BusinessLinkedList<T, D, R> extends LinkedList<ILogicHandler<T, D, 
             ILogicHandler<T, D, R> logicHandler = currentNode.item;
             R apply = logicHandler.apply(requestParameter, dynamicContext);
             if (null != apply) return apply;
-
             currentNode = currentNode.next;
         } while (null != currentNode);
 

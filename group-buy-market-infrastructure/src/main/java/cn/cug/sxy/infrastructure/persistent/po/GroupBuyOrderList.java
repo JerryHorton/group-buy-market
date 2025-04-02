@@ -66,9 +66,13 @@ public class GroupBuyOrderList {
      */
     private BigDecimal originalPrice;
     /**
-     * 折扣金额
+     * 支付价格
      */
-    private BigDecimal deductionPrice;
+    private BigDecimal payPrice;
+    /**
+     * 折扣扣除的金额
+     */
+    private BigDecimal discountDeduction;
     /**
      * 状态；0初始锁定、1消费完成
      */
@@ -77,6 +81,10 @@ public class GroupBuyOrderList {
      * 外部交易单号-确保外部调用唯一幂等
      */
     private String outTradeNo;
+    /**
+     * 业务唯一ID
+     */
+    private String bizId;
     /**
      * 创建时间
      */

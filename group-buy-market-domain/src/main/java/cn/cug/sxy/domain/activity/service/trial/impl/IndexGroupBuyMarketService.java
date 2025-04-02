@@ -3,7 +3,7 @@ package cn.cug.sxy.domain.activity.service.trial.impl;
 import cn.cug.sxy.domain.activity.model.entity.MarketProductEntity;
 import cn.cug.sxy.domain.activity.model.entity.TrialBalanceEntity;
 import cn.cug.sxy.domain.activity.service.trial.IIndexGroupBuyMarketService;
-import cn.cug.sxy.domain.activity.service.trial.factory.DefaultActivityStrategyFactory;
+import cn.cug.sxy.domain.activity.service.trial.factory.ActivityStrategyFactory;
 import cn.cug.sxy.types.design.framework.tree.StrategyHandler;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +20,12 @@ import javax.annotation.Resource;
 public class IndexGroupBuyMarketService implements IIndexGroupBuyMarketService {
 
     @Resource
-    private DefaultActivityStrategyFactory defaultActivityStrategyFactory;
+    private ActivityStrategyFactory activityStrategyFactory;
 
     @Override
     public TrialBalanceEntity indexMarketTrial(MarketProductEntity marketProductEntity) throws Exception {
-        StrategyHandler<MarketProductEntity, DefaultActivityStrategyFactory.DynamicContext, TrialBalanceEntity> strategyHandler = defaultActivityStrategyFactory.strategyHandler();
-        return strategyHandler.apply(marketProductEntity, new DefaultActivityStrategyFactory.DynamicContext());
+        StrategyHandler<MarketProductEntity, ActivityStrategyFactory.DynamicContext, TrialBalanceEntity> strategyHandler = activityStrategyFactory.strategyHandler();
+        return strategyHandler.apply(marketProductEntity, new ActivityStrategyFactory.DynamicContext());
     }
 
 }

@@ -13,6 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface IGroupBuyActivityDao {
 
-    GroupBuyActivity queryValidGroupBuyActivityByActivityId(Long activityId);
+    GroupBuyActivity queryGroupBuyActivityByActivityId(Long activityId);
 
 }

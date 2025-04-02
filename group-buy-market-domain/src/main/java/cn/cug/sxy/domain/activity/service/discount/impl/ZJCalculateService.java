@@ -20,12 +20,12 @@ public class ZJCalculateService extends AbstractDiscountCalculateService {
 
     @Override
     protected BigDecimal doCalculate(BigDecimal originalPrice, GroupBuyActivityVO.GroupBuyDiscount groupBuyDiscount) {
-        log.info("优惠策略折扣计算:{}", groupBuyDiscount.getDiscountType().getInfo());
+        log.info("优惠策略计算 - 直减优惠:{}", groupBuyDiscount.getDiscountType().getInfo());
         String marketExpr = groupBuyDiscount.getMarketExpr();
-        BigDecimal deduction = new BigDecimal(marketExpr);
-        BigDecimal deductionPrice = originalPrice.subtract(deduction);
+        BigDecimal discountDeduction = new BigDecimal(marketExpr);
+        BigDecimal discountedPrice = originalPrice.subtract(discountDeduction);
 
-        return validPrice(deductionPrice);
+        return validPrice(discountedPrice);
     }
 
 }

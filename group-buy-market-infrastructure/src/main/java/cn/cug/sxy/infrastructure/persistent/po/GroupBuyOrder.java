@@ -46,11 +46,11 @@ public class GroupBuyOrder {
      */
     private BigDecimal originalPrice;
     /**
-     * 折扣金额
+     * 折扣扣除的金额
      */
-    private BigDecimal deductionPrice;
+    private BigDecimal discountDeduction;
     /**
-     * 支付价格
+     * 最终支付价格
      */
     private BigDecimal payPrice;
     /**

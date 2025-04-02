@@ -6,7 +6,7 @@ import cn.cug.sxy.domain.activity.model.valobj.GroupBuyActivityVO;
 import cn.cug.sxy.domain.activity.model.valobj.SkuVO;
 import cn.cug.sxy.domain.activity.service.discount.IDiscountCalculateService;
 import cn.cug.sxy.domain.activity.service.trial.AbstractGroupBuyMarketSupport;
-import cn.cug.sxy.domain.activity.service.trial.factory.DefaultActivityStrategyFactory;
+import cn.cug.sxy.domain.activity.service.trial.factory.ActivityStrategyFactory;
 import cn.cug.sxy.types.design.framework.tree.StrategyHandler;
 import cn.cug.sxy.types.enums.ResponseCode;
 import cn.cug.sxy.types.exception.AppException;
@@ -27,7 +27,7 @@ import java.util.Map;
 
 @Slf4j
 @Service
-public class MarketNode extends AbstractGroupBuyMarketSupport<MarketProductEntity, DefaultActivityStrategyFactory.DynamicContext, TrialBalanceEntity> {
+public class MarketNode extends AbstractGroupBuyMarketSupport<MarketProductEntity, ActivityStrategyFactory.DynamicContext, TrialBalanceEntity> {
 
     @Resource
     private Map<String, IDiscountCalculateService> discountCalculateServiceMap;
@@ -36,7 +36,7 @@ public class MarketNode extends AbstractGroupBuyMarketSupport<MarketProductEntit
     private EndNode endNode;
 
     @Override
-    protected TrialBalanceEntity doApply(MarketProductEntity requestParameter, DefaultActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
+    protected TrialBalanceEntity doApply(MarketProductEntity requestParameter, ActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
         log.info("拼团商品查询试算服务-MarketNode userId:{} requestParameter:{}", requestParameter.getUserId(), JSON.toJSONString(requestParameter));
         // 获取上下文数据
         GroupBuyActivityVO groupBuyActivityVO = dynamicContext.getGroupBuyActivityVO();
@@ -48,13 +48,13 @@ public class MarketNode extends AbstractGroupBuyMarketSupport<MarketProductEntit
             log.info("不存在{}类型的折扣计算服务，支持类型为:{}", groupBuyDiscount.getMarketPlan(), JSON.toJSONString(discountCalculateServiceMap.keySet()));
             throw new AppException(ResponseCode.E0001.getCode(), ResponseCode.E0001.getInfo());
         }
-        BigDecimal deductionPrice = discountCalculateService.calculate(requestParameter.getUserId(), skuVO.getOriginalPrice(), dynamicContext);
-        dynamicContext.setDeductionPrice(deductionPrice);
+        BigDecimal discountedPrice = discountCalculateService.calculate(requestParameter.getUserId(), skuVO.getOriginalPrice(), dynamicContext);
+        dynamicContext.setFinalPrice(discountedPrice);
         return router(requestParameter, dynamicContext);
     }
 
     @Override
-    public StrategyHandler<MarketProductEntity, DefaultActivityStrategyFactory.DynamicContext, TrialBalanceEntity> get(MarketProductEntity requestParameter, DefaultActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
+    public StrategyHandler<MarketProductEntity, ActivityStrategyFactory.DynamicContext, TrialBalanceEntity> get(MarketProductEntity requestParameter, ActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
         return endNode;
     }
 

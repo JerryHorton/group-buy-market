@@ -21,17 +21,17 @@ public class MJCalculateService extends AbstractDiscountCalculateService {
 
     @Override
     protected BigDecimal doCalculate(BigDecimal originalPrice, GroupBuyActivityVO.GroupBuyDiscount groupBuyDiscount) {
-        log.info("优惠策略折扣计算:{}", groupBuyDiscount.getDiscountType().getInfo());
+        log.info("优惠策略计算 - 满减优惠:{}", groupBuyDiscount.getDiscountType().getInfo());
         String marketExpr = groupBuyDiscount.getMarketExpr();
         String[] parts = marketExpr.split(Constants.SPLIT);
         BigDecimal threshold = new BigDecimal(parts[0]);
-        BigDecimal deduction = new BigDecimal(parts[1]);
+        BigDecimal discountDeduction = new BigDecimal(parts[1]);
         if (threshold.compareTo(originalPrice) > 0) {
             return originalPrice;
         }
-        BigDecimal deductionPrice = originalPrice.subtract(deduction);
+        BigDecimal discountedPrice = originalPrice.subtract(discountDeduction);
 
-        return validPrice(deductionPrice);
+        return validPrice(discountedPrice);
     }
 
 }

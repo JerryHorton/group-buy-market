@@ -45,7 +45,7 @@ public class MarketTradeController implements IMarketTradeService {
 
     @RequestMapping(value = "lock_market_pay_order", method = RequestMethod.POST)
     @Override
-    public Response<LockMarketPayOrderResponseDTO> lockMarketPayOrder(@RequestBody LockMarketPayOrderRequestDTO lockMarketPayOrderRequestDTO) {
+    public Response<LockMarketPayOrderResponseDTO> lockMarketPayOrder(@RequestBody LockMarketPayOrderRequestDTO lockMarketPayOrderRequestDTO) throws Exception {
         try {
             // 参数
             String userId = lockMarketPayOrderRequestDTO.getUserId();
@@ -70,8 +70,8 @@ public class MarketTradeController implements IMarketTradeService {
             if (null != marketPayOrderEntity) {
                 LockMarketPayOrderResponseDTO lockMarketPayOrderResponseDTO = LockMarketPayOrderResponseDTO.builder()
                         .orderId(marketPayOrderEntity.getOrderId())
-                        .deductionPrice(marketPayOrderEntity.getDeductionPrice())
-                        .tradeOrderStatus(marketPayOrderEntity.getTradeOrderStatusEnumVO().getCode())
+                        .discountedPrice(marketPayOrderEntity.getPayPrice())
+                        .tradeOrderStatus(marketPayOrderEntity.getTradeOrderStatusVO().getCode())
                         .build();
 
                 log.info("交易锁单记录(存在):{} marketPayOrderEntity:{}", userId, JSON.toJSONString(marketPayOrderEntity));
@@ -117,7 +117,7 @@ public class MarketTradeController implements IMarketTradeService {
                             .goodsId(goodsId)
                             .goodsName(trialBalanceEntity.getGoodsName())
                             .originalPrice(trialBalanceEntity.getOriginalPrice())
-                            .deductionPrice(trialBalanceEntity.getDeductionPrice())
+                            .discountDeduction(trialBalanceEntity.getDiscountDeduction())
                             .outTradeNo(outTradeNo)
                             .build());
             log.info("交易锁单记录(新):{} marketPayOrderEntity:{}", userId, JSON.toJSONString(marketPayOrderEntity));
@@ -127,8 +127,8 @@ public class MarketTradeController implements IMarketTradeService {
                     .info(ResponseCode.SUCCESS.getInfo())
                     .data(LockMarketPayOrderResponseDTO.builder()
                             .orderId(marketPayOrderEntity.getOrderId())
-                            .deductionPrice(marketPayOrderEntity.getDeductionPrice())
-                            .tradeOrderStatus(marketPayOrderEntity.getTradeOrderStatusEnumVO().getCode())
+                            .discountedPrice(marketPayOrderEntity.getPayPrice())
+                            .tradeOrderStatus(marketPayOrderEntity.getTradeOrderStatusVO().getCode())
                             .build())
                     .build();
         } catch (AppException e) {

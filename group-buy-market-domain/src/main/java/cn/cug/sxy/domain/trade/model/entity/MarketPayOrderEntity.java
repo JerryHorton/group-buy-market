@@ -1,6 +1,6 @@
 package cn.cug.sxy.domain.trade.model.entity;
 
-import cn.cug.sxy.domain.trade.model.valobj.TradeOrderStatusEnumVO;
+import cn.cug.sxy.domain.trade.model.valobj.TradeOrderStatusVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,12 +26,20 @@ public class MarketPayOrderEntity {
      */
     private String orderId;
     /**
-     * 折扣金额
+     * 原始价格
      */
-    private BigDecimal deductionPrice;
+    private BigDecimal originalPrice;
+    /**
+     * 支付价格
+     */
+    private BigDecimal payPrice;
+    /**
+     * 折扣扣除的金额
+     */
+    private BigDecimal discountDeduction;
     /**
      * 交易订单状态枚举
      */
-    private TradeOrderStatusEnumVO tradeOrderStatusEnumVO;
+    private TradeOrderStatusVO tradeOrderStatusVO;
 
 }

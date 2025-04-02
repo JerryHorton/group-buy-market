@@ -41,9 +41,9 @@ public class PayDiscountEntity {
      */
     private BigDecimal originalPrice;
     /**
-     * 折扣金额
+     * 折扣扣除的金额
      */
-    private BigDecimal deductionPrice;
+    private BigDecimal discountDeduction;
     /**
      * 外部交易单号-确保外部调用唯一幂等
      */

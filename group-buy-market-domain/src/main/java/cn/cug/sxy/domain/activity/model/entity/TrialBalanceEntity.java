@@ -35,9 +35,13 @@ public class TrialBalanceEntity {
      */
     private BigDecimal originalPrice;
     /**
-     * 折扣价格
+     * 折扣扣除金额
      */
-    private BigDecimal deductionPrice;
+    private BigDecimal discountDeduction;
+    /**
+     * 最终价格
+     */
+    private BigDecimal finalPrice;
     /**
      * 拼团目标数量
      */

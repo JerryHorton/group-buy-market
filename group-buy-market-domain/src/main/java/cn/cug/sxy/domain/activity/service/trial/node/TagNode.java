@@ -7,7 +7,7 @@ import cn.cug.sxy.domain.activity.model.valobj.GroupBuyActivityVO;
 import cn.cug.sxy.domain.activity.model.valobj.SkuVO;
 import cn.cug.sxy.domain.activity.model.valobj.TagScopeVO;
 import cn.cug.sxy.domain.activity.service.trial.AbstractGroupBuyMarketSupport;
-import cn.cug.sxy.domain.activity.service.trial.factory.DefaultActivityStrategyFactory;
+import cn.cug.sxy.domain.activity.service.trial.factory.ActivityStrategyFactory;
 import cn.cug.sxy.domain.activity.service.trial.thread.QueryGroupBuyActivityVOThreadTask;
 import cn.cug.sxy.domain.activity.service.trial.thread.QuerySkuVOThreadTask;
 import cn.cug.sxy.types.design.framework.tree.StrategyHandler;
@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
-public class TagNode extends AbstractGroupBuyMarketSupport<MarketProductEntity, DefaultActivityStrategyFactory.DynamicContext, TrialBalanceEntity> {
+public class TagNode extends AbstractGroupBuyMarketSupport<MarketProductEntity, ActivityStrategyFactory.DynamicContext, TrialBalanceEntity> {
 
     @Resource
     private ThreadPoolExecutor threadPoolExecutor;
@@ -45,7 +45,7 @@ public class TagNode extends AbstractGroupBuyMarketSupport<MarketProductEntity, 
     private ErrorNode errorNode;
 
     @Override
-    protected void multiThread(MarketProductEntity requestParameter, DefaultActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
+    protected void multiThread(MarketProductEntity requestParameter, ActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
         QueryGroupBuyActivityVOThreadTask queryGroupBuyActivityVOThreadTask = new QueryGroupBuyActivityVOThreadTask(requestParameter.getSource(), requestParameter.getChannel(), requestParameter.getGoodsId(), activityRepository);
         FutureTask<GroupBuyActivityVO> groupBuyActivityVOFutureTask = new FutureTask<>(queryGroupBuyActivityVOThreadTask);
         threadPoolExecutor.execute(groupBuyActivityVOFutureTask);
@@ -60,7 +60,7 @@ public class TagNode extends AbstractGroupBuyMarketSupport<MarketProductEntity, 
     }
 
     @Override
-    protected TrialBalanceEntity doApply(MarketProductEntity requestParameter, DefaultActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
+    protected TrialBalanceEntity doApply(MarketProductEntity requestParameter, ActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
         log.info("拼团商品查询试算服务-TagNode userId:{} tagsConfig:{} 人群标签过滤", requestParameter.getUserId(), JSON.toJSONString(dynamicContext.getGroupBuyActivityVO().getTagsConfig()));
         // 获取上下文数据
         GroupBuyActivityVO groupBuyActivityVO = dynamicContext.getGroupBuyActivityVO();
@@ -88,7 +88,7 @@ public class TagNode extends AbstractGroupBuyMarketSupport<MarketProductEntity, 
     }
 
     @Override
-    public StrategyHandler<MarketProductEntity, DefaultActivityStrategyFactory.DynamicContext, TrialBalanceEntity> get(MarketProductEntity requestParameter, DefaultActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
+    public StrategyHandler<MarketProductEntity, ActivityStrategyFactory.DynamicContext, TrialBalanceEntity> get(MarketProductEntity requestParameter, ActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
         if (null == dynamicContext.getGroupBuyActivityVO() || null == dynamicContext.getSkuVO()) {
             return errorNode;
         }

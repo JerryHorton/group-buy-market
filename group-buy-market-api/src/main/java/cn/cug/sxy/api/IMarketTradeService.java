@@ -13,6 +13,6 @@ import cn.cug.sxy.api.response.Response;
 
 public interface IMarketTradeService {
 
-    Response<LockMarketPayOrderResponseDTO> lockMarketPayOrder(LockMarketPayOrderRequestDTO lockMarketPayOrderRequestDTO);
+    Response<LockMarketPayOrderResponseDTO> lockMarketPayOrder(LockMarketPayOrderRequestDTO lockMarketPayOrderRequestDTO) throws Exception ;
 
 }

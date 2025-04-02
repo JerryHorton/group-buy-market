@@ -1,8 +1,5 @@
 package cn.cug.sxy.domain.trade.model.valobj;
 
-import cn.cug.sxy.types.common.Constants;
-import cn.cug.sxy.types.enums.ResponseCode;
-import cn.cug.sxy.types.exception.AppException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public enum TradeOrderStatusEnumVO {
+public enum TradeOrderStatusVO {
 
     CREATE(0, "初始创建"),
     COMPLETE(1, "消费完成"),
@@ -27,7 +24,7 @@ public enum TradeOrderStatusEnumVO {
     private Integer code;
     private String info;
 
-    public static TradeOrderStatusEnumVO valueOf(Integer code) {
+    public static TradeOrderStatusVO valueOf(Integer code) {
         switch (code) {
             case 0:
                 return CREATE;

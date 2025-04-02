@@ -3,7 +3,7 @@ package cn.cug.sxy.domain.activity.service.trial.node;
 import cn.cug.sxy.domain.activity.model.entity.MarketProductEntity;
 import cn.cug.sxy.domain.activity.model.entity.TrialBalanceEntity;
 import cn.cug.sxy.domain.activity.service.trial.AbstractGroupBuyMarketSupport;
-import cn.cug.sxy.domain.activity.service.trial.factory.DefaultActivityStrategyFactory;
+import cn.cug.sxy.domain.activity.service.trial.factory.ActivityStrategyFactory;
 import cn.cug.sxy.types.design.framework.tree.StrategyHandler;
 import cn.cug.sxy.types.enums.ResponseCode;
 import cn.cug.sxy.types.exception.AppException;
@@ -20,10 +20,10 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class ErrorNode extends AbstractGroupBuyMarketSupport<MarketProductEntity, DefaultActivityStrategyFactory.DynamicContext, TrialBalanceEntity> {
+public class ErrorNode extends AbstractGroupBuyMarketSupport<MarketProductEntity, ActivityStrategyFactory.DynamicContext, TrialBalanceEntity> {
 
     @Override
-    protected TrialBalanceEntity doApply(MarketProductEntity requestParameter, DefaultActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
+    protected TrialBalanceEntity doApply(MarketProductEntity requestParameter, ActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
         log.info("拼团商品查询试算服务-ErrorNode userId:{} requestParameter:{}", requestParameter.getUserId(), JSON.toJSONString(requestParameter));
         if (null == dynamicContext.getGroupBuyActivityVO() || null == dynamicContext.getSkuVO()) {
             throw new AppException(ResponseCode.E0002.getCode(), ResponseCode.E0002.getInfo());
@@ -32,7 +32,7 @@ public class ErrorNode extends AbstractGroupBuyMarketSupport<MarketProductEntity
     }
 
     @Override
-    public StrategyHandler<MarketProductEntity, DefaultActivityStrategyFactory.DynamicContext, TrialBalanceEntity> get(MarketProductEntity requestParameter, DefaultActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
+    public StrategyHandler<MarketProductEntity, ActivityStrategyFactory.DynamicContext, TrialBalanceEntity> get(MarketProductEntity requestParameter, ActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
         return defaultStrategyHandler;
     }
 

@@ -3,8 +3,7 @@ package cn.cug.sxy.domain.activity.service.trial.node;
 import cn.cug.sxy.domain.activity.model.entity.MarketProductEntity;
 import cn.cug.sxy.domain.activity.model.entity.TrialBalanceEntity;
 import cn.cug.sxy.domain.activity.service.trial.AbstractGroupBuyMarketSupport;
-import cn.cug.sxy.domain.activity.service.trial.factory.DefaultActivityStrategyFactory;
-import cn.cug.sxy.types.annotation.DCCValue;
+import cn.cug.sxy.domain.activity.service.trial.factory.ActivityStrategyFactory;
 import cn.cug.sxy.types.design.framework.tree.StrategyHandler;
 import cn.cug.sxy.types.enums.ResponseCode;
 import cn.cug.sxy.types.exception.AppException;
@@ -22,13 +21,13 @@ import javax.annotation.Resource;
 
 @Slf4j
 @Service
-public class SwitchRoot extends AbstractGroupBuyMarketSupport<MarketProductEntity, DefaultActivityStrategyFactory.DynamicContext, TrialBalanceEntity> {
+public class SwitchRoot extends AbstractGroupBuyMarketSupport<MarketProductEntity, ActivityStrategyFactory.DynamicContext, TrialBalanceEntity> {
 
     @Resource
     private TagNode tagNode;
 
     @Override
-    protected TrialBalanceEntity doApply(MarketProductEntity requestParameter, DefaultActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
+    protected TrialBalanceEntity doApply(MarketProductEntity requestParameter, ActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
         String userId = requestParameter.getUserId();
         if (activityRepository.degradeSwitch()) {
             throw new AppException(ResponseCode.E0003.getCode(), ResponseCode.E0003.getInfo());
@@ -40,7 +39,7 @@ public class SwitchRoot extends AbstractGroupBuyMarketSupport<MarketProductEntit
     }
 
     @Override
-    public StrategyHandler<MarketProductEntity, DefaultActivityStrategyFactory.DynamicContext, TrialBalanceEntity> get(MarketProductEntity requestParameter, DefaultActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
+    public StrategyHandler<MarketProductEntity, ActivityStrategyFactory.DynamicContext, TrialBalanceEntity> get(MarketProductEntity requestParameter, ActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
         return tagNode;
     }
 

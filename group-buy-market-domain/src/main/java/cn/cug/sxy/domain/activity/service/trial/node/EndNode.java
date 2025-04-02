@@ -5,13 +5,11 @@ import cn.cug.sxy.domain.activity.model.entity.TrialBalanceEntity;
 import cn.cug.sxy.domain.activity.model.valobj.GroupBuyActivityVO;
 import cn.cug.sxy.domain.activity.model.valobj.SkuVO;
 import cn.cug.sxy.domain.activity.service.trial.AbstractGroupBuyMarketSupport;
-import cn.cug.sxy.domain.activity.service.trial.factory.DefaultActivityStrategyFactory;
+import cn.cug.sxy.domain.activity.service.trial.factory.ActivityStrategyFactory;
 import cn.cug.sxy.types.design.framework.tree.StrategyHandler;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
 
 /**
  * @version 1.0
@@ -22,10 +20,10 @@ import java.math.BigDecimal;
 
 @Slf4j
 @Service
-public class EndNode extends AbstractGroupBuyMarketSupport<MarketProductEntity, DefaultActivityStrategyFactory.DynamicContext, TrialBalanceEntity> {
+public class EndNode extends AbstractGroupBuyMarketSupport<MarketProductEntity, ActivityStrategyFactory.DynamicContext, TrialBalanceEntity> {
 
     @Override
-    protected TrialBalanceEntity doApply(MarketProductEntity requestParameter, DefaultActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
+    protected TrialBalanceEntity doApply(MarketProductEntity requestParameter, ActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
         log.info("拼团商品查询试算服务-EndNode userId:{} requestParameter:{}", requestParameter.getUserId(), JSON.toJSONString(requestParameter));
         GroupBuyActivityVO groupBuyActivityVO = dynamicContext.getGroupBuyActivityVO();
         SkuVO skuVO = dynamicContext.getSkuVO();
@@ -34,7 +32,8 @@ public class EndNode extends AbstractGroupBuyMarketSupport<MarketProductEntity, 
                 .goodsId(groupBuyActivityVO.getGoodsId())
                 .goodsName(skuVO.getGoodsName())
                 .originalPrice(skuVO.getOriginalPrice())
-                .deductionPrice(dynamicContext.getDeductionPrice())
+                .finalPrice(dynamicContext.getFinalPrice())
+                .discountDeduction(skuVO.getOriginalPrice().subtract(dynamicContext.getFinalPrice()))
                 .targetCount(groupBuyActivityVO.getTargetCount())
                 .startTime(groupBuyActivityVO.getStartTime())
                 .endTime(groupBuyActivityVO.getEndTime())
@@ -45,7 +44,7 @@ public class EndNode extends AbstractGroupBuyMarketSupport<MarketProductEntity, 
     }
 
     @Override
-    public StrategyHandler<MarketProductEntity, DefaultActivityStrategyFactory.DynamicContext, TrialBalanceEntity> get(MarketProductEntity requestParameter, DefaultActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
+    public StrategyHandler<MarketProductEntity, ActivityStrategyFactory.DynamicContext, TrialBalanceEntity> get(MarketProductEntity requestParameter, ActivityStrategyFactory.DynamicContext dynamicContext) throws Exception {
         return defaultStrategyHandler;
     }
 

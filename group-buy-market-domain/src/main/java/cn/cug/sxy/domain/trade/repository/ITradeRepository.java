@@ -1,6 +1,7 @@
 package cn.cug.sxy.domain.trade.repository;
 
 import cn.cug.sxy.domain.trade.model.aggregate.GroupBuyOrderAggregate;
+import cn.cug.sxy.domain.trade.model.entity.GroupBuyActivityEntity;
 import cn.cug.sxy.domain.trade.model.entity.MarketPayOrderEntity;
 import cn.cug.sxy.domain.trade.model.valobj.GroupBuyProgressVO;
 
@@ -16,6 +17,10 @@ public interface ITradeRepository {
     MarketPayOrderEntity queryUnpaidMarketPayOrderByOutTradeNo(String userId, String outTradeNo);
 
     GroupBuyProgressVO queryGroupBuyProgress(String teamId);
+
+    GroupBuyActivityEntity queryGroupBuyActivityEntity(Long activityId);
+
+    Integer queryActivityParticipationCount(String userId, Long activityId);
 
     MarketPayOrderEntity lockMarketPayOrder(GroupBuyOrderAggregate groupBuyOrderAggregate);
 

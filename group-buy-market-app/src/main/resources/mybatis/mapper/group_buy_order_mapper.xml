@@ -9,7 +9,7 @@
         <result column="source" property="source"/>
         <result column="channel" property="channel"/>
         <result column="original_price" property="originalPrice"/>
-        <result column="deduction_price" property="deductionPrice"/>
+        <result column="discount_deduction" property="discountDeduction"/>
         <result column="pay_price" property="payPrice"/>
         <result column="target_count" property="targetCount"/>
         <result column="complete_count" property="completeCount"/>
@@ -25,7 +25,7 @@
                source,
                channel,
                original_price,
-               deduction_price,
+               discount_deduction,
                pay_price,
                target_count,
                complete_count,
@@ -37,10 +37,10 @@
 
     <insert id="insertGroupBuyOrder" parameterType="cn.cug.sxy.infrastructure.persistent.po.GroupBuyOrder">
         insert into group_buy_order(team_id, activity_id, source, channel, original_price,
-                                    deduction_price, pay_price, target_count, complete_count, lock_count, status,
+                                    discount_deduction, pay_price, target_count, complete_count, lock_count, status,
                                     create_time, update_time)
         values (#{teamId}, #{activityId}, #{source}, #{channel}, #{originalPrice},
-                #{deductionPrice}, #{payPrice}, #{targetCount}, #{completeCount}, #{lockCount}, 0, now(), now())
+                #{discountDeduction}, #{payPrice}, #{targetCount}, #{completeCount}, #{lockCount}, 0, now(), now())
     </insert>
 
     <update id="updateAddLockCount" parameterType="java.lang.String">
