@@ -1,10 +1,10 @@
-package cn.cug.sxy.domain.trade.service.factory;
+package cn.cug.sxy.domain.trade.service.lock.factory;
 
 import cn.cug.sxy.domain.trade.model.entity.GroupBuyActivityEntity;
 import cn.cug.sxy.domain.trade.model.entity.TradeRuleCommandEntity;
 import cn.cug.sxy.domain.trade.model.entity.TradeRuleFilterBackEntity;
-import cn.cug.sxy.domain.trade.service.filter.ActivityUsabilityFilter;
-import cn.cug.sxy.domain.trade.service.filter.UserTakeLimitRuleFilter;
+import cn.cug.sxy.domain.trade.service.lock.filter.ActivityUsabilityFilter;
+import cn.cug.sxy.domain.trade.service.lock.filter.UserTakeLimitRuleFilter;
 import cn.cug.sxy.types.design.framework.link.multitonModel.LinkArmory;
 import cn.cug.sxy.types.design.framework.link.multitonModel.chain.BusinessLinkedList;
 import lombok.AllArgsConstructor;

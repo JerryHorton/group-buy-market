@@ -26,6 +26,10 @@ public class MarketPayOrderEntity {
      */
     private String orderId;
     /**
+     * 拼团ID
+     */
+    private String teamId;
+    /**
      * 原始价格
      */
     private BigDecimal originalPrice;

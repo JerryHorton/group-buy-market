@@ -52,4 +52,19 @@
         ]]>
     </update>
 
+    <update id="updateAddCompleteCount" parameterType="java.lang.String">
+        <![CDATA[
+        update group_buy_order
+        set complete_count = complete_count + 1
+        where team_id = #{teamId}
+          and complete_count < lock_count
+        ]]>
+    </update>
+
+    <update id="updateGroupBuyOrderStatus" parameterType="cn.cug.sxy.infrastructure.persistent.po.GroupBuyOrder">
+        update group_buy_order
+        set status = #{status}
+        where team_id = #{teamId}
+    </update>
+
 </mapper>

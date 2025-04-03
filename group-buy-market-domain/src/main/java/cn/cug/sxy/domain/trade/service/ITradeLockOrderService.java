@@ -13,7 +13,7 @@ import cn.cug.sxy.domain.trade.model.valobj.GroupBuyProgressVO;
  * @Author jerryhotton
  */
 
-public interface ITradeOrderService {
+public interface ITradeLockOrderService {
 
     MarketPayOrderEntity queryUnpaidMarketPayOrderByOutTradeNo(String userId, String outTradeNo);
 

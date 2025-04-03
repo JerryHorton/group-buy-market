@@ -1,11 +1,11 @@
-package cn.cug.sxy.domain.trade.service.impl;
+package cn.cug.sxy.domain.trade.service.lock;
 
 import cn.cug.sxy.domain.trade.model.aggregate.GroupBuyOrderAggregate;
 import cn.cug.sxy.domain.trade.model.entity.*;
 import cn.cug.sxy.domain.trade.model.valobj.GroupBuyProgressVO;
 import cn.cug.sxy.domain.trade.repository.ITradeRepository;
-import cn.cug.sxy.domain.trade.service.ITradeOrderService;
-import cn.cug.sxy.domain.trade.service.factory.TradeRuleFilterFactory;
+import cn.cug.sxy.domain.trade.service.ITradeLockOrderService;
+import cn.cug.sxy.domain.trade.service.lock.factory.TradeRuleFilterFactory;
 import cn.cug.sxy.types.design.framework.link.multitonModel.chain.BusinessLinkedList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ import javax.annotation.Resource;
 
 @Slf4j
 @Service
-public class TradeOrderService implements ITradeOrderService {
+public class TradeLockOrderService implements ITradeLockOrderService {
 
     @Resource
     private ITradeRepository tradeRepository;
@@ -32,7 +32,7 @@ public class TradeOrderService implements ITradeOrderService {
     @Override
     public MarketPayOrderEntity queryUnpaidMarketPayOrderByOutTradeNo(String userId, String outTradeNo) {
         log.info("拼团交易-查询未支付营销订单:{} outTradeNo:{}", userId, outTradeNo);
-        return tradeRepository.queryUnpaidMarketPayOrderByOutTradeNo(userId, outTradeNo);
+        return tradeRepository.queryUnpaidMarketPayOrderByOutTradeNo(outTradeNo);
     }
 
     @Override

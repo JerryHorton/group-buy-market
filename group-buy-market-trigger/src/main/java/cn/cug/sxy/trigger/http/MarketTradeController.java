@@ -13,7 +13,7 @@ import cn.cug.sxy.domain.trade.model.entity.PayActivityEntity;
 import cn.cug.sxy.domain.trade.model.entity.PayDiscountEntity;
 import cn.cug.sxy.domain.trade.model.entity.UserEntity;
 import cn.cug.sxy.domain.trade.model.valobj.GroupBuyProgressVO;
-import cn.cug.sxy.domain.trade.service.ITradeOrderService;
+import cn.cug.sxy.domain.trade.service.ITradeLockOrderService;
 import cn.cug.sxy.types.enums.ResponseCode;
 import cn.cug.sxy.types.exception.AppException;
 import com.alibaba.fastjson.JSON;
@@ -38,7 +38,7 @@ import java.util.Objects;
 public class MarketTradeController implements IMarketTradeService {
 
     @Resource
-    private ITradeOrderService tradeOrderService;
+    private ITradeLockOrderService tradeOrderService;
 
     @Resource
     private IIndexGroupBuyMarketService indexGroupBuyMarketService;

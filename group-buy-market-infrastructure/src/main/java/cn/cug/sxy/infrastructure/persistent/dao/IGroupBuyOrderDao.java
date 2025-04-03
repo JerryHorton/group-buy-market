@@ -19,4 +19,8 @@ public interface IGroupBuyOrderDao {
 
     int updateAddLockCount(String teamId);
 
+    int updateAddCompleteCount(String teamId);
+
+    int updateGroupBuyOrderStatus(GroupBuyOrder groupBuyOrder);
+
 }

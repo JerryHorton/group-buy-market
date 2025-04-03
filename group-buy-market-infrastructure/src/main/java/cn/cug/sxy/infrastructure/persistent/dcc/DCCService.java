@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class DCCService implements IDCCService {
 
-    @DCCValue("degradeSwitch:1")
+    @DCCValue("degradeSwitch:0")
     private String degradeSwitch;
 
     @DCCValue("cutRange:100")
