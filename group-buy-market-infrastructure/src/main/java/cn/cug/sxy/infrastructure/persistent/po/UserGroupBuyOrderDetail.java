@@ -82,6 +82,10 @@ public class UserGroupBuyOrderDetail {
      */
     private String outTradeNo;
     /**
+     * 外部交易时间
+     */
+    private Date outTradeTime;
+    /**
      * 业务唯一ID
      */
     private String bizId;

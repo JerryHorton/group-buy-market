@@ -39,9 +39,6 @@ public class TagNode extends AbstractGroupBuyMarketSupport<MarketProductEntity, 
     private MarketNode marketNode;
 
     @Resource
-    private EndNode endNode;
-
-    @Resource
     private ErrorNode errorNode;
 
     @Override

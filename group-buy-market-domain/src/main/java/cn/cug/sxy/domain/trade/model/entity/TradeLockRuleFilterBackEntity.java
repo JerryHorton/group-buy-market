@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * @version 1.0
- * @Date 2025/4/1 23:22
- * @Description 拼团交易命令 实体
+ * @Date 2025/4/1 23:23
+ * @Description 拼团交易过滤结果反馈 实体
  * @Author jerryhotton
  */
 
@@ -16,15 +16,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TradeRuleCommandEntity {
+public class TradeLockRuleFilterBackEntity {
 
     /**
-     * 用户ID
+     * 用户参与活动的订单量
      */
-    private String userId;
-    /**
-     * 活动ID
-     */
-    private Long activityId;
+    private Integer userParticipationCount;
 
 }

@@ -9,6 +9,7 @@ import cn.cug.sxy.infrastructure.persistent.dao.IGroupBuyActivityDao;
 import cn.cug.sxy.infrastructure.persistent.dao.IGroupBuyOrderDao;
 import cn.cug.sxy.infrastructure.persistent.dao.IUserGroupBuyOrderDetailDao;
 import cn.cug.sxy.infrastructure.persistent.dao.INotifyTaskDao;
+import cn.cug.sxy.infrastructure.persistent.dcc.IDCCService;
 import cn.cug.sxy.infrastructure.persistent.po.GroupBuyActivity;
 import cn.cug.sxy.infrastructure.persistent.po.GroupBuyOrder;
 import cn.cug.sxy.infrastructure.persistent.po.UserGroupBuyOrderDetail;
@@ -17,6 +18,7 @@ import cn.cug.sxy.types.common.Constants;
 import cn.cug.sxy.types.enums.ResponseCode;
 import cn.cug.sxy.types.exception.AppException;
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DuplicateKeyException;
@@ -24,6 +26,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,6 +38,7 @@ import java.util.List;
  * @Author jerryhotton
  */
 
+@Slf4j
 @Repository
 public class TradeRepository implements ITradeRepository {
 
@@ -48,6 +53,9 @@ public class TradeRepository implements ITradeRepository {
 
     @Resource
     private INotifyTaskDao notifyTaskDao;
+
+    @Resource
+    private IDCCService dccService;
 
     @Override
     public MarketPayOrderEntity queryUnpaidMarketPayOrderByOutTradeNo(String outTradeNo) {
@@ -119,6 +127,8 @@ public class TradeRepository implements ITradeRepository {
                 .lockCount(groupBuyOrder.getLockCount())
                 .completeCount(groupBuyOrder.getCompleteCount())
                 .status(GroupBuyOrderStatusVO.valueOf(groupBuyOrder.getStatus()))
+                .validStartTime(groupBuyOrder.getValidStartTime())
+                .validEndTime(groupBuyOrder.getValidEndTime())
                 .build();
     }
 
@@ -133,7 +143,14 @@ public class TradeRepository implements ITradeRepository {
         // 判断是否有团 - teamId 为空 - 新团、为不空 - 老团
         String teamId = payActivityEntity.getTeamId();
         if (StringUtils.isBlank(teamId)) {
+            // 生成拼团ID
             teamId = RandomStringUtils.randomAlphabetic(8);
+            // 日期处理
+            Date currentDate = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(currentDate);
+            calendar.add(Calendar.MINUTE, payActivityEntity.getValidTime());
+
             // 构建拼团订单
             GroupBuyOrder groupBuyOrder = GroupBuyOrder.builder()
                     .teamId(teamId)
@@ -146,6 +163,8 @@ public class TradeRepository implements ITradeRepository {
                     .targetCount(payActivityEntity.getTargetCount())
                     .completeCount(0)
                     .lockCount(1)
+                    .validStartTime(currentDate)
+                    .validEndTime(calendar.getTime())
                     .build();
             // 写入记录
             groupBuyOrderDao.insertGroupBuyOrder(groupBuyOrder);
@@ -200,8 +219,9 @@ public class TradeRepository implements ITradeRepository {
         // 1. 更新用户拼团明细状态
         UserGroupBuyOrderDetail userGroupBuyOrderDetailReq = new UserGroupBuyOrderDetail();
         userGroupBuyOrderDetailReq.setOutTradeNo(tradePaySuccessEntity.getOutTradeNo());
+        userGroupBuyOrderDetailReq.setOutTradeTime(tradePaySuccessEntity.getOutTradeTime());
         userGroupBuyOrderDetailReq.setStatus(TradeOrderStatusVO.COMPLETE.getCode());
-        userGroupBuyOrderDetailDao.updateGroupBuyOrderListStatus(userGroupBuyOrderDetailReq);
+        userGroupBuyOrderDetailDao.updateUserGroupBuyOrderDetailStatus(userGroupBuyOrderDetailReq);
 
         // 2. 更新拼团达成数量
         int updateOrderListCount = groupBuyOrderDao.updateAddCompleteCount(groupBuyTeamEntity.getTeamId());
@@ -236,6 +256,11 @@ public class TradeRepository implements ITradeRepository {
             notifyTaskDao.insertNotifyTask(notifyTask);
         }
 
+    }
+
+    @Override
+    public Boolean isSCBlackListIntercept(String source, String channel) {
+        return dccService.isSCBlackListIntercept(source, channel);
     }
 
 }

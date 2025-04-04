@@ -1,10 +1,10 @@
 package cn.cug.sxy.domain.trade.service.lock.filter;
 
 import cn.cug.sxy.domain.trade.model.entity.GroupBuyActivityEntity;
-import cn.cug.sxy.domain.trade.model.entity.TradeRuleCommandEntity;
-import cn.cug.sxy.domain.trade.model.entity.TradeRuleFilterBackEntity;
+import cn.cug.sxy.domain.trade.model.entity.TradeLockRuleCommandEntity;
+import cn.cug.sxy.domain.trade.model.entity.TradeLockRuleFilterBackEntity;
 import cn.cug.sxy.domain.trade.repository.ITradeRepository;
-import cn.cug.sxy.domain.trade.service.lock.factory.TradeRuleFilterFactory;
+import cn.cug.sxy.domain.trade.service.lock.factory.TradeLockRuleFilterFactory;
 import cn.cug.sxy.types.design.framework.link.multitonModel.handler.ILogicHandler;
 import cn.cug.sxy.types.enums.ResponseCode;
 import cn.cug.sxy.types.exception.AppException;
@@ -22,13 +22,13 @@ import javax.annotation.Resource;
 
 @Slf4j
 @Service
-public class UserTakeLimitRuleFilter implements ILogicHandler<TradeRuleCommandEntity, TradeRuleFilterFactory.DynamicContext, TradeRuleFilterBackEntity> {
+public class UserTakeLimitRuleFilter implements ILogicHandler<TradeLockRuleCommandEntity, TradeLockRuleFilterFactory.DynamicContext, TradeLockRuleFilterBackEntity> {
 
     @Resource
     private ITradeRepository repository;
 
     @Override
-    public TradeRuleFilterBackEntity apply(TradeRuleCommandEntity requestParameter, TradeRuleFilterFactory.DynamicContext dynamicContext) throws Exception {
+    public TradeLockRuleFilterBackEntity apply(TradeLockRuleCommandEntity requestParameter, TradeLockRuleFilterFactory.DynamicContext dynamicContext) throws Exception {
         log.info("交易规则过滤-用户参与次数校验{} activityId:{}", requestParameter.getUserId(), requestParameter.getActivityId());
         GroupBuyActivityEntity groupBuyActivityEntity = dynamicContext.getGroupBuyActivityEntity();
 
@@ -38,7 +38,7 @@ public class UserTakeLimitRuleFilter implements ILogicHandler<TradeRuleCommandEn
             throw new AppException(ResponseCode.E0103);
         }
 
-        return TradeRuleFilterBackEntity.builder()
+        return TradeLockRuleFilterBackEntity.builder()
                 .userParticipationCount(participationCount)
                 .build();
     }

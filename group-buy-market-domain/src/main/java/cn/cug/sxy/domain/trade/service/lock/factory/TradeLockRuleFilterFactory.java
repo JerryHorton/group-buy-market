@@ -1,8 +1,8 @@
 package cn.cug.sxy.domain.trade.service.lock.factory;
 
 import cn.cug.sxy.domain.trade.model.entity.GroupBuyActivityEntity;
-import cn.cug.sxy.domain.trade.model.entity.TradeRuleCommandEntity;
-import cn.cug.sxy.domain.trade.model.entity.TradeRuleFilterBackEntity;
+import cn.cug.sxy.domain.trade.model.entity.TradeLockRuleCommandEntity;
+import cn.cug.sxy.domain.trade.model.entity.TradeLockRuleFilterBackEntity;
 import cn.cug.sxy.domain.trade.service.lock.filter.ActivityUsabilityFilter;
 import cn.cug.sxy.domain.trade.service.lock.filter.UserTakeLimitRuleFilter;
 import cn.cug.sxy.types.design.framework.link.multitonModel.LinkArmory;
@@ -23,7 +23,7 @@ import javax.annotation.Resource;
  */
 
 @Service
-public class TradeRuleFilterFactory {
+public class TradeLockRuleFilterFactory {
 
     @Resource
     private ActivityUsabilityFilter activityUsabilityFilter;
@@ -31,8 +31,8 @@ public class TradeRuleFilterFactory {
     @Resource
     private UserTakeLimitRuleFilter userTakeLimitRuleFilter;
 
-    public BusinessLinkedList<TradeRuleCommandEntity, DynamicContext, TradeRuleFilterBackEntity> openTradeRuleFilter(String linkName) {
-        return new LinkArmory<TradeRuleCommandEntity, DynamicContext, TradeRuleFilterBackEntity>(linkName)
+    public BusinessLinkedList<TradeLockRuleCommandEntity, DynamicContext, TradeLockRuleFilterBackEntity> openTradeLockRuleFilter(String linkName) {
+        return new LinkArmory<TradeLockRuleCommandEntity, DynamicContext, TradeLockRuleFilterBackEntity>(linkName)
                 .addHandler(activityUsabilityFilter)
                 .addHandler(userTakeLimitRuleFilter)
                 .getLogicLink();

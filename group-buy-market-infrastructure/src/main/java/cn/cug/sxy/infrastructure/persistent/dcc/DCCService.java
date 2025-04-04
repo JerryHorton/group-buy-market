@@ -1,7 +1,11 @@
 package cn.cug.sxy.infrastructure.persistent.dcc;
 
 import cn.cug.sxy.types.annotation.DCCValue;
+import cn.cug.sxy.types.common.Constants;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @version 1.0
@@ -19,6 +23,9 @@ public class DCCService implements IDCCService {
     @DCCValue("cutRange:100")
     private String cutRange;
 
+    @DCCValue("scBlackList:SOURCE_002-CHANNEL_002")
+    private String scBlackList;
+
     public Boolean isDegradeSwitch() {
         return "1".equals(degradeSwitch);
     }
@@ -28,6 +35,12 @@ public class DCCService implements IDCCService {
         int range = Integer.parseInt(cutRange);
         int lastTwoDigits = hashCode % 100;
         return lastTwoDigits <= range;
+    }
+
+    @Override
+    public Boolean isSCBlackListIntercept(String source, String channel) {
+        List<String> list = Arrays.asList(scBlackList.split(Constants.SPLIT));
+        return list.contains(source + Constants.HYPHEN + channel);
     }
 
 }

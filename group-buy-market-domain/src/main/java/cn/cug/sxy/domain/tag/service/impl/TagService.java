@@ -33,7 +33,8 @@ public class TagService implements ITagService {
         // todo这部分需要采集用户的消费类数据，后续有用户发起拼单后再处理。
         // 3. 数据写入记录
         List<String> userIdList = new ArrayList<String>() {{
-            add("user003");
+            add("user001");
+            add("user002");
         }};
         // 4. 添加人群标签明细
         for (String userId : userIdList) {

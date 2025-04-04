@@ -30,4 +30,6 @@ public interface ITradeRepository {
 
     void settlementMarketPayOrder(TradePaySettlementAggregate tradePaySettlementAggregate);
 
+    Boolean isSCBlackListIntercept(String source, String channel);
+
 }

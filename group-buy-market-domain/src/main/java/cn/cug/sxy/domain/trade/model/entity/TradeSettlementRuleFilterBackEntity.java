@@ -1,17 +1,17 @@
-package cn.cug.sxy.infrastructure.persistent.po;
+package cn.cug.sxy.domain.trade.model.entity;
 
+import cn.cug.sxy.domain.trade.model.valobj.GroupBuyOrderStatusVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * @version 1.0
- * @Date 2025/3/31 19:25
- * @Description 拼单订单
+ * @Date 2025/4/1 23:23
+ * @Description 拼团结算过滤结果反馈 实体
  * @Author jerryhotton
  */
 
@@ -19,12 +19,8 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GroupBuyOrder {
+public class TradeSettlementRuleFilterBackEntity {
 
-    /**
-     * 自增ID
-     */
-    private Long id;
     /**
      * 拼单组队ID
      */
@@ -33,26 +29,6 @@ public class GroupBuyOrder {
      * 活动ID
      */
     private Long activityId;
-    /**
-     * 渠道
-     */
-    private String source;
-    /**
-     * 来源
-     */
-    private String channel;
-    /**
-     * 原始价格
-     */
-    private BigDecimal originalPrice;
-    /**
-     * 折扣扣除的金额
-     */
-    private BigDecimal discountDeduction;
-    /**
-     * 最终支付价格
-     */
-    private BigDecimal payPrice;
     /**
      * 目标参团数量
      */
@@ -68,7 +44,7 @@ public class GroupBuyOrder {
     /**
      * 状态（0-拼单中、1-完成、2-失败）
      */
-    private Integer status;
+    private GroupBuyOrderStatusVO status;
     /**
      * 拼团开始时间
      */
@@ -77,13 +53,5 @@ public class GroupBuyOrder {
      * 拼团结束时间
      */
     private Date validEndTime;
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
 
 }

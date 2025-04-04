@@ -23,6 +23,6 @@ public interface IUserGroupBuyOrderDetailDao {
 
     void insertGroupBuyOrderList(UserGroupBuyOrderDetail userGroupBuyOrderDetail);
 
-    void updateGroupBuyOrderListStatus(UserGroupBuyOrderDetail userGroupBuyOrderDetailReq);
+    void updateUserGroupBuyOrderDetailStatus(UserGroupBuyOrderDetail userGroupBuyOrderDetailReq);
 
 }

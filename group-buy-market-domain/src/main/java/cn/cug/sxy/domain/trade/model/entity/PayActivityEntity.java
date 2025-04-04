@@ -33,13 +33,17 @@ public class PayActivityEntity {
      */
     private String activityName;
     /**
-     * 拼团开始时间
+     * 活动开始时间
      */
     private Date startTime;
     /**
-     * 拼团结束时间
+     * 活动结束时间
      */
     private Date endTime;
+    /**
+     * 拼团时长（分钟）
+     */
+    private Integer validTime;
     /**
      * 目标数量
      */

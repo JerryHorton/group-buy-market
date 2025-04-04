@@ -4,6 +4,8 @@ import cn.cug.sxy.domain.trade.model.aggregate.TradePaySettlementAggregate;
 import cn.cug.sxy.domain.trade.model.entity.*;
 import cn.cug.sxy.domain.trade.repository.ITradeRepository;
 import cn.cug.sxy.domain.trade.service.ITradeSettlementOrderService;
+import cn.cug.sxy.domain.trade.service.settelement.factory.TradeSettlementRuleFilterFactory;
+import cn.cug.sxy.types.design.framework.link.multitonModel.chain.BusinessLinkedList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +25,24 @@ public class TradeSettlementOrderService implements ITradeSettlementOrderService
     @Resource
     private ITradeRepository repository;
 
+    @Resource
+    private TradeSettlementRuleFilterFactory tradeSettlementRuleFilterFactory;
+
     @Override
-    public TradePaySettlementEntity settlementMarketPayOrder(TradePaySuccessEntity tradePaySuccessEntity) {
+    public TradePaySettlementEntity settlementMarketPayOrder(TradePaySuccessEntity tradePaySuccessEntity) throws Exception {
         log.info("拼团交易-结算营销拼团订单 userId:{}, outTradeNo:{}", tradePaySuccessEntity.getUserId(), tradePaySuccessEntity.getOutTradeNo());
 
-        // 1. 查询用户拼团单信息
+        // 1. 交易结算责任链过滤
+        BusinessLinkedList<TradeSettlementRuleCommandEntity, TradeSettlementRuleFilterFactory.DynamicContext, TradeSettlementRuleFilterBackEntity> tradeRuleFilter = tradeSettlementRuleFilterFactory.openTradeSettlementRuleFilter("交易结算责任链");
+        TradeSettlementRuleFilterBackEntity tradeSettlementRuleFilterBackEntity = tradeRuleFilter.apply(TradeSettlementRuleCommandEntity.builder()
+                        .userId(tradePaySuccessEntity.getUserId())
+                        .source(tradePaySuccessEntity.getSource())
+                        .channel(tradePaySuccessEntity.getChannel())
+                        .outTradeNo(tradePaySuccessEntity.getOutTradeNo())
+                        .outTradeTime(tradePaySuccessEntity.getOutTradeTime())
+                        .build(),
+                new TradeSettlementRuleFilterFactory.DynamicContext());
+
         MarketPayOrderEntity marketPayOrderEntity = repository.queryUnpaidMarketPayOrderByOutTradeNo(tradePaySuccessEntity.getOutTradeNo());
         if (null == marketPayOrderEntity) {
             log.error("拼团交易-结算营销拼团订单失败, 未查询到拼团订单信息, userId:{} outTradeNo:{}", tradePaySuccessEntity.getUserId(), tradePaySuccessEntity.getOutTradeNo());
@@ -35,7 +50,16 @@ public class TradeSettlementOrderService implements ITradeSettlementOrderService
         }
 
         // 2. 查询拼团信息
-        GroupBuyTeamEntity groupBuyTeamEntity = repository.queryGroupBuyTeamByTeamByTeamId(marketPayOrderEntity.getTeamId());
+        GroupBuyTeamEntity groupBuyTeamEntity = GroupBuyTeamEntity.builder()
+                .teamId(tradeSettlementRuleFilterBackEntity.getTeamId())
+                .activityId(tradeSettlementRuleFilterBackEntity.getActivityId())
+                .targetCount(tradeSettlementRuleFilterBackEntity.getTargetCount())
+                .completeCount(tradeSettlementRuleFilterBackEntity.getCompleteCount())
+                .lockCount(tradeSettlementRuleFilterBackEntity.getLockCount())
+                .status(tradeSettlementRuleFilterBackEntity.getStatus())
+                .validStartTime(tradeSettlementRuleFilterBackEntity.getValidStartTime())
+                .validEndTime(tradeSettlementRuleFilterBackEntity.getValidEndTime())
+                .build();
 
         // 3. 构建聚合对象
         TradePaySettlementAggregate tradePaySettlementAggregate = TradePaySettlementAggregate.builder()

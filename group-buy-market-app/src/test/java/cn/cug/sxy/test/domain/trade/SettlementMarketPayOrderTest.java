@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * @version 1.0
@@ -27,12 +28,13 @@ public class SettlementMarketPayOrderTest {
     private ITradeSettlementOrderService tradeSettlementOrderService;
 
     @Test
-    public void test_settlementMarketPayOrder() {
+    public void test_settlementMarketPayOrder() throws Exception {
         TradePaySettlementEntity tradePaySettlementEntity = tradeSettlementOrderService.settlementMarketPayOrder(TradePaySuccessEntity.builder()
                 .source("SOURCE_001")
                 .channel("CHANNEL_001")
                 .userId("uer002")
-                .outTradeNo("2010300909")
+                .outTradeNo("20103009010")
+                .outTradeTime(new Date())
                 .build());
         log.info("测试成功: 结算营销拼团订单成功, 结算信息: {}", tradePaySettlementEntity);
     }

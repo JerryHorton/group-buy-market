@@ -31,7 +31,7 @@ public class execTagBatchJobTest {
 
     @Test
     public void test_execTagBatchJob() {
-        tagService.execTagBatchJob("TAG_0002", "0002");
+        tagService.execTagBatchJob("TAG_0001", "0001");
     }
 
     @Test

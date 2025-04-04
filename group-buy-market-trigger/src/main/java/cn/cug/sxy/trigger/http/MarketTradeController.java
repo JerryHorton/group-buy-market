@@ -110,6 +110,7 @@ public class MarketTradeController implements IMarketTradeService {
                             .startTime(groupBuyActivityVO.getStartTime())
                             .endTime(groupBuyActivityVO.getEndTime())
                             .targetCount(groupBuyActivityVO.getTargetCount())
+                            .validTime(groupBuyActivityVO.getValidTime())
                             .build(),
                     PayDiscountEntity.builder()
                             .source(source)

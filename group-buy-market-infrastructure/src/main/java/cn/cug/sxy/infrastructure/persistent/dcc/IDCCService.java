@@ -16,4 +16,6 @@ public interface IDCCService {
 
     Boolean isCutRange(String userId);
 
+    Boolean isSCBlackListIntercept(String source, String channel);
+
 }
