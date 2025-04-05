@@ -1,6 +1,6 @@
 package cn.cug.sxy.infrastructure.persistent.dao;
 
-import cn.cug.sxy.infrastructure.persistent.po.ActivityTagsConfig;
+import cn.cug.sxy.infrastructure.persistent.dao.po.ActivityTagsConfig;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

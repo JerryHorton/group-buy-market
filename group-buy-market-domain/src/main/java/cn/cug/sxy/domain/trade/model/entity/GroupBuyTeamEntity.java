@@ -53,5 +53,9 @@ public class GroupBuyTeamEntity {
      * 拼团结束时间
      */
     private Date validEndTime;
+    /**
+     * 拼团成功回调接口
+     */
+    private String notifyUrl;
 
 }

@@ -40,5 +40,9 @@ public class LockMarketPayOrderRequestDTO {
      * 外部交易单号
      */
     private String outTradeNo;
+    /**
+     * 拼团成功回调接口
+     */
+    private String notifyUrl;
 
 }

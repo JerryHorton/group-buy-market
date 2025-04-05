@@ -1,13 +1,13 @@
-package cn.cug.sxy.infrastructure.persistent.repository;
+package cn.cug.sxy.infrastructure.persistent.adaptor.repository;
 
 import cn.cug.sxy.domain.tag.model.entity.CrowdTagsJobEntity;
 import cn.cug.sxy.domain.tag.repository.ITagRepository;
 import cn.cug.sxy.infrastructure.persistent.dao.ICrowdTagsDao;
 import cn.cug.sxy.infrastructure.persistent.dao.ICrowdTagsDetailDao;
 import cn.cug.sxy.infrastructure.persistent.dao.ICrowdTagsJobDao;
-import cn.cug.sxy.infrastructure.persistent.po.CrowdTags;
-import cn.cug.sxy.infrastructure.persistent.po.CrowdTagsDetail;
-import cn.cug.sxy.infrastructure.persistent.po.CrowdTagsJob;
+import cn.cug.sxy.infrastructure.persistent.dao.po.CrowdTags;
+import cn.cug.sxy.infrastructure.persistent.dao.po.CrowdTagsDetail;
+import cn.cug.sxy.infrastructure.persistent.dao.po.CrowdTagsJob;
 import cn.cug.sxy.infrastructure.persistent.redis.IRedisService;
 import org.redisson.api.RBitSet;
 import org.springframework.dao.DuplicateKeyException;

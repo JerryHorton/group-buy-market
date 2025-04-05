@@ -1,6 +1,6 @@
 package cn.cug.sxy.infrastructure.persistent.dao;
 
-import cn.cug.sxy.infrastructure.persistent.po.GroupBuyOrder;
+import cn.cug.sxy.infrastructure.persistent.dao.po.GroupBuyOrder;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

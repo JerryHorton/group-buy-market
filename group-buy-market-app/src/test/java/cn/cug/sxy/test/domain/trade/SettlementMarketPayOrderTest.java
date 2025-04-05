@@ -33,7 +33,7 @@ public class SettlementMarketPayOrderTest {
                 .source("SOURCE_001")
                 .channel("CHANNEL_001")
                 .userId("uer002")
-                .outTradeNo("20103009010")
+                .outTradeNo("2010300909")
                 .outTradeTime(new Date())
                 .build());
         log.info("测试成功: 结算营销拼团订单成功, 结算信息: {}", tradePaySettlementEntity);

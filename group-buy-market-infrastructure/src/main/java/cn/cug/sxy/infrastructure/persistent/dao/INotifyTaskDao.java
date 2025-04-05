@@ -1,7 +1,9 @@
 package cn.cug.sxy.infrastructure.persistent.dao;
 
-import cn.cug.sxy.infrastructure.persistent.po.NotifyTask;
+import cn.cug.sxy.infrastructure.persistent.dao.po.NotifyTask;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * @version 1.0
@@ -14,5 +16,9 @@ import org.apache.ibatis.annotations.Mapper;
 public interface INotifyTaskDao {
 
     void insertNotifyTask(NotifyTask notifyTask);
+
+    List<NotifyTask> queryUnExecuteSuccessNotifyTaskList(String teamId);
+
+    int updateNotifyTaskStatus(NotifyTask notifyTaskReq);
 
 }

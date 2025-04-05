@@ -1,4 +1,4 @@
-package cn.cug.sxy.infrastructure.persistent.po;
+package cn.cug.sxy.infrastructure.persistent.dao.po;
 
 import lombok.Data;
 
@@ -6,13 +6,13 @@ import java.util.Date;
 
 /**
  * @version 1.0
- * @Date 2025/3/30 10:21
- * @Description 人群标签明细
+ * @Date 2025/3/30 10:20
+ * @Description 人群标签
  * @Author jerryhotton
  */
 
 @Data
-public class CrowdTagsDetail {
+public class CrowdTags {
 
     /**
      * 自增ID
@@ -23,9 +23,17 @@ public class CrowdTagsDetail {
      */
     private String tagId;
     /**
-     * 用户ID
+     * 人群名称
      */
-    private String userId;
+    private String tagName;
+    /**
+     * 人群描述
+     */
+    private String tagDesc;
+    /**
+     * 人群标签统计量
+     */
+    private Integer statistics;
     /**
      * 创建时间
      */

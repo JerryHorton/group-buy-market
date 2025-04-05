@@ -3,6 +3,8 @@ package cn.cug.sxy.domain.trade.service;
 import cn.cug.sxy.domain.trade.model.entity.TradePaySettlementEntity;
 import cn.cug.sxy.domain.trade.model.entity.TradePaySuccessEntity;
 
+import java.util.Map;
+
 /**
  * @version 1.0
  * @Date 2025/4/3 11:42
@@ -19,5 +21,9 @@ public interface ITradeSettlementOrderService {
      * @return 交易结算订单实体
      */
     TradePaySettlementEntity settlementMarketPayOrder(TradePaySuccessEntity tradePaySuccessEntity) throws Exception;
+
+    Map<String, Integer> execSettlementNotifyJob() throws Exception;
+
+    Map<String, Integer> execSettlementNotifyJob(String teamId) throws Exception;
 
 }

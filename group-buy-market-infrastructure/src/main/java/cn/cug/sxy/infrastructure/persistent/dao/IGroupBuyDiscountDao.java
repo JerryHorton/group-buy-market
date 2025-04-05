@@ -1,6 +1,6 @@
 package cn.cug.sxy.infrastructure.persistent.dao;
 
-import cn.cug.sxy.infrastructure.persistent.po.GroupBuyDiscount;
+import cn.cug.sxy.infrastructure.persistent.dao.po.GroupBuyDiscount;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

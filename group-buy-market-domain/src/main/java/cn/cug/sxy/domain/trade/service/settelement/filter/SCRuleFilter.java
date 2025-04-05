@@ -2,7 +2,7 @@ package cn.cug.sxy.domain.trade.service.settelement.filter;
 
 import cn.cug.sxy.domain.trade.model.entity.TradeSettlementRuleCommandEntity;
 import cn.cug.sxy.domain.trade.model.entity.TradeSettlementRuleFilterBackEntity;
-import cn.cug.sxy.domain.trade.repository.ITradeRepository;
+import cn.cug.sxy.domain.trade.adaptor.repository.ITradeRepository;
 import cn.cug.sxy.domain.trade.service.settelement.factory.TradeSettlementRuleFilterFactory;
 import cn.cug.sxy.types.design.framework.link.multitonModel.handler.ILogicHandler;
 import cn.cug.sxy.types.enums.ResponseCode;

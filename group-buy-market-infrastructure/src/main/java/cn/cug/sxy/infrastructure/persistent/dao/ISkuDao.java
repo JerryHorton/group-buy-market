@@ -1,6 +1,6 @@
 package cn.cug.sxy.infrastructure.persistent.dao;
 
-import cn.cug.sxy.infrastructure.persistent.po.Sku;
+import cn.cug.sxy.infrastructure.persistent.dao.po.Sku;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

@@ -1,4 +1,4 @@
-package cn.cug.sxy.infrastructure.persistent.repository;
+package cn.cug.sxy.infrastructure.persistent.adaptor.repository;
 
 import cn.cug.sxy.domain.activity.model.valobj.DiscountTypeVO;
 import cn.cug.sxy.domain.activity.model.valobj.GroupBuyActivityVO;
@@ -7,7 +7,7 @@ import cn.cug.sxy.domain.activity.model.valobj.TagScopeVO;
 import cn.cug.sxy.domain.activity.repository.IActivityRepository;
 import cn.cug.sxy.infrastructure.persistent.dao.*;
 import cn.cug.sxy.infrastructure.persistent.dcc.IDCCService;
-import cn.cug.sxy.infrastructure.persistent.po.*;
+import cn.cug.sxy.infrastructure.persistent.dao.po.*;
 import cn.cug.sxy.infrastructure.persistent.redis.IRedisService;
 import cn.cug.sxy.types.common.Constants;
 import org.redisson.api.RBitSet;

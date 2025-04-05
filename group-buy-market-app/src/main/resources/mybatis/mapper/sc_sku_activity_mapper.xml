@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.cug.sxy.infrastructure.persistent.dao.ISCSkuActivityDao">
 
-    <resultMap id="dataMap" type="cn.cug.sxy.infrastructure.persistent.po.SCSkuActivity">
+    <resultMap id="dataMap" type="cn.cug.sxy.infrastructure.persistent.dao.po.SCSkuActivity">
         <id column="id" property="id"/>
         <result column="source" property="source"/>
         <result column="channel" property="channel"/>
@@ -12,7 +12,7 @@
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
-    <select id="querySCSkuActivity" parameterType="cn.cug.sxy.infrastructure.persistent.po.SCSkuActivity"
+    <select id="querySCSkuActivity" parameterType="cn.cug.sxy.infrastructure.persistent.dao.po.SCSkuActivity"
             resultMap="dataMap">
         select source,
                channel,

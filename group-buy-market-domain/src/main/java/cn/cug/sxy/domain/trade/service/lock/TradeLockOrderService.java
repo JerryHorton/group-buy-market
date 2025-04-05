@@ -3,7 +3,7 @@ package cn.cug.sxy.domain.trade.service.lock;
 import cn.cug.sxy.domain.trade.model.aggregate.GroupBuyOrderAggregate;
 import cn.cug.sxy.domain.trade.model.entity.*;
 import cn.cug.sxy.domain.trade.model.valobj.GroupBuyProgressVO;
-import cn.cug.sxy.domain.trade.repository.ITradeRepository;
+import cn.cug.sxy.domain.trade.adaptor.repository.ITradeRepository;
 import cn.cug.sxy.domain.trade.service.ITradeLockOrderService;
 import cn.cug.sxy.domain.trade.service.lock.factory.TradeLockRuleFilterFactory;
 import cn.cug.sxy.types.design.framework.link.multitonModel.chain.BusinessLinkedList;

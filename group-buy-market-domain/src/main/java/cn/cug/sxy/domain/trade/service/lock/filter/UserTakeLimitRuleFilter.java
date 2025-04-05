@@ -3,7 +3,7 @@ package cn.cug.sxy.domain.trade.service.lock.filter;
 import cn.cug.sxy.domain.trade.model.entity.GroupBuyActivityEntity;
 import cn.cug.sxy.domain.trade.model.entity.TradeLockRuleCommandEntity;
 import cn.cug.sxy.domain.trade.model.entity.TradeLockRuleFilterBackEntity;
-import cn.cug.sxy.domain.trade.repository.ITradeRepository;
+import cn.cug.sxy.domain.trade.adaptor.repository.ITradeRepository;
 import cn.cug.sxy.domain.trade.service.lock.factory.TradeLockRuleFilterFactory;
 import cn.cug.sxy.types.design.framework.link.multitonModel.handler.ILogicHandler;
 import cn.cug.sxy.types.enums.ResponseCode;

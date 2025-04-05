@@ -1,20 +1,21 @@
-package cn.cug.sxy.infrastructure.persistent.repository;
+package cn.cug.sxy.infrastructure.persistent.adaptor.repository;
 
 import cn.cug.sxy.domain.trade.model.aggregate.GroupBuyOrderAggregate;
 import cn.cug.sxy.domain.trade.model.aggregate.TradePaySettlementAggregate;
 import cn.cug.sxy.domain.trade.model.entity.*;
 import cn.cug.sxy.domain.trade.model.valobj.*;
-import cn.cug.sxy.domain.trade.repository.ITradeRepository;
+import cn.cug.sxy.domain.trade.adaptor.repository.ITradeRepository;
 import cn.cug.sxy.infrastructure.persistent.dao.IGroupBuyActivityDao;
 import cn.cug.sxy.infrastructure.persistent.dao.IGroupBuyOrderDao;
 import cn.cug.sxy.infrastructure.persistent.dao.IUserGroupBuyOrderDetailDao;
 import cn.cug.sxy.infrastructure.persistent.dao.INotifyTaskDao;
 import cn.cug.sxy.infrastructure.persistent.dcc.IDCCService;
-import cn.cug.sxy.infrastructure.persistent.po.GroupBuyActivity;
-import cn.cug.sxy.infrastructure.persistent.po.GroupBuyOrder;
-import cn.cug.sxy.infrastructure.persistent.po.UserGroupBuyOrderDetail;
-import cn.cug.sxy.infrastructure.persistent.po.NotifyTask;
+import cn.cug.sxy.infrastructure.persistent.dao.po.GroupBuyActivity;
+import cn.cug.sxy.infrastructure.persistent.dao.po.GroupBuyOrder;
+import cn.cug.sxy.infrastructure.persistent.dao.po.UserGroupBuyOrderDetail;
+import cn.cug.sxy.infrastructure.persistent.dao.po.NotifyTask;
 import cn.cug.sxy.types.common.Constants;
+import cn.cug.sxy.types.enums.NotifyTaskHTTPStatus;
 import cn.cug.sxy.types.enums.ResponseCode;
 import cn.cug.sxy.types.exception.AppException;
 import com.alibaba.fastjson.JSON;
@@ -26,10 +27,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * @version 1.0
@@ -129,7 +127,28 @@ public class TradeRepository implements ITradeRepository {
                 .status(GroupBuyOrderStatusVO.valueOf(groupBuyOrder.getStatus()))
                 .validStartTime(groupBuyOrder.getValidStartTime())
                 .validEndTime(groupBuyOrder.getValidEndTime())
+                .notifyUrl(groupBuyOrder.getNotifyUrl())
                 .build();
+    }
+
+    @Override
+    public List<NotifyTaskEntity> queryUnExecuteSuccessNotifyTaskList() {
+        return queryUnExecuteSuccessNotifyTaskList(null);
+    }
+
+    @Override
+    public List<NotifyTaskEntity> queryUnExecuteSuccessNotifyTaskList(String teamId) {
+        List<NotifyTask> notifyTaskList = notifyTaskDao.queryUnExecuteSuccessNotifyTaskList(teamId);
+        List<NotifyTaskEntity> notifyTaskEntityList = new ArrayList<>();
+        for (NotifyTask notifyTask : notifyTaskList) {
+            notifyTaskEntityList.add(NotifyTaskEntity.builder()
+                    .teamId(notifyTask.getTeamId())
+                    .notifyUrl(notifyTask.getNotifyUrl())
+                    .parameterJson(notifyTask.getParameterJson())
+                    .notifyCount(notifyTask.getNotifyCount())
+                    .build());
+        }
+        return notifyTaskEntityList;
     }
 
     @Transactional(timeout = 500)
@@ -165,6 +184,7 @@ public class TradeRepository implements ITradeRepository {
                     .lockCount(1)
                     .validStartTime(currentDate)
                     .validEndTime(calendar.getTime())
+                    .notifyUrl(payDiscountEntity.getNotifyUrl())
                     .build();
             // 写入记录
             groupBuyOrderDao.insertGroupBuyOrder(groupBuyOrder);
@@ -246,9 +266,10 @@ public class TradeRepository implements ITradeRepository {
             NotifyTask notifyTask = new NotifyTask();
             notifyTask.setActivityId(groupBuyTeamEntity.getActivityId());
             notifyTask.setTeamId(groupBuyTeamEntity.getTeamId());
-            notifyTask.setNotifyUrl("暂无");
+            notifyTask.setNotifyUrl(groupBuyTeamEntity.getNotifyUrl());
             notifyTask.setNotifyCount(0);
             notifyTask.setNotifyStatus(NotifyTaskStatusVO.INIT.getCode());
+            notifyTask.setNotifyUrl(groupBuyTeamEntity.getNotifyUrl());
             notifyTask.setParameterJson(JSON.toJSONString(new HashMap<String, Object>() {{
                 put("teamId", groupBuyTeamEntity.getTeamId());
                 put("outTradeNoList", outTradeNoList);
@@ -261,6 +282,30 @@ public class TradeRepository implements ITradeRepository {
     @Override
     public Boolean isSCBlackListIntercept(String source, String channel) {
         return dccService.isSCBlackListIntercept(source, channel);
+    }
+
+    @Override
+    public int updateNotifyTaskStatusSuccess(String teamId) {
+        NotifyTask notifyTaskReq = new NotifyTask();
+        notifyTaskReq.setTeamId(teamId);
+        notifyTaskReq.setNotifyStatus(NotifyTaskStatusVO.SUCCESS.getCode());
+        return notifyTaskDao.updateNotifyTaskStatus(notifyTaskReq);
+    }
+
+    @Override
+    public int updateNotifyTaskStatusRetry(String teamId) {
+        NotifyTask notifyTaskReq = new NotifyTask();
+        notifyTaskReq.setTeamId(teamId);
+        notifyTaskReq.setNotifyStatus(NotifyTaskStatusVO.RETRY.getCode());
+        return notifyTaskDao.updateNotifyTaskStatus(notifyTaskReq);
+    }
+
+    @Override
+    public int updateNotifyTaskStatusError(String teamId) {
+        NotifyTask notifyTaskReq = new NotifyTask();
+        notifyTaskReq.setTeamId(teamId);
+        notifyTaskReq.setNotifyStatus(NotifyTaskStatusVO.ERROR.getCode());
+        return notifyTaskDao.updateNotifyTaskStatus(notifyTaskReq);
     }
 
 }

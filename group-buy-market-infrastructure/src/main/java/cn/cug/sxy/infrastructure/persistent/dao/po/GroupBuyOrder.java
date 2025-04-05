@@ -1,4 +1,4 @@
-package cn.cug.sxy.infrastructure.persistent.po;
+package cn.cug.sxy.infrastructure.persistent.dao.po;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -77,6 +77,10 @@ public class GroupBuyOrder {
      * 拼团结束时间
      */
     private Date validEndTime;
+    /**
+     * 回调接口
+     */
+    private String notifyUrl;
     /**
      * 创建时间
      */

@@ -1,6 +1,6 @@
 package cn.cug.sxy.infrastructure.persistent.dao;
 
-import cn.cug.sxy.infrastructure.persistent.po.CrowdTagsJob;
+import cn.cug.sxy.infrastructure.persistent.dao.po.CrowdTagsJob;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

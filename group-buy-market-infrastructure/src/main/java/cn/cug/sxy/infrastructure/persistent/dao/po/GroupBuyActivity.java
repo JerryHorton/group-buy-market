@@ -1,4 +1,4 @@
-package cn.cug.sxy.infrastructure.persistent.po;
+package cn.cug.sxy.infrastructure.persistent.dao.po;
 
 import lombok.Data;
 

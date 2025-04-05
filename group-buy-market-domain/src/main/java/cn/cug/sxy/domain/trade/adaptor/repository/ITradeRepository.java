@@ -1,11 +1,14 @@
-package cn.cug.sxy.domain.trade.repository;
+package cn.cug.sxy.domain.trade.adaptor.repository;
 
 import cn.cug.sxy.domain.trade.model.aggregate.GroupBuyOrderAggregate;
 import cn.cug.sxy.domain.trade.model.aggregate.TradePaySettlementAggregate;
 import cn.cug.sxy.domain.trade.model.entity.GroupBuyActivityEntity;
 import cn.cug.sxy.domain.trade.model.entity.GroupBuyTeamEntity;
 import cn.cug.sxy.domain.trade.model.entity.MarketPayOrderEntity;
+import cn.cug.sxy.domain.trade.model.entity.NotifyTaskEntity;
 import cn.cug.sxy.domain.trade.model.valobj.GroupBuyProgressVO;
+
+import java.util.List;
 
 /**
  * @version 1.0
@@ -26,10 +29,20 @@ public interface ITradeRepository {
 
     GroupBuyTeamEntity queryGroupBuyTeamByTeamByTeamId(String teamId);
 
+    List<NotifyTaskEntity> queryUnExecuteSuccessNotifyTaskList();
+
+    List<NotifyTaskEntity> queryUnExecuteSuccessNotifyTaskList(String teamId);
+
     MarketPayOrderEntity lockMarketPayOrder(GroupBuyOrderAggregate groupBuyOrderAggregate);
 
     void settlementMarketPayOrder(TradePaySettlementAggregate tradePaySettlementAggregate);
 
     Boolean isSCBlackListIntercept(String source, String channel);
+
+    int updateNotifyTaskStatusSuccess(String teamId);
+
+    int updateNotifyTaskStatusRetry(String teamId);
+
+    int updateNotifyTaskStatusError(String teamId);
 
 }

@@ -19,7 +19,7 @@ public enum NotifyTaskStatusVO {
     INIT(0, "初始"),
     SUCCESS(1, "完成"),
     RETRY(2, "重试"),
-    FAILED(3, "失败"),
+    ERROR(3, "失败"),
     ;
 
     private Integer code;
@@ -34,7 +34,7 @@ public enum NotifyTaskStatusVO {
             case 2:
                 return RETRY;
             case 3:
-                return FAILED;
+                return ERROR;
             default:
                 throw new RuntimeException("error NotifyTaskStatus code:" + code);
         }

@@ -1,15 +1,21 @@
 package cn.cug.sxy.domain.trade.service.settelement;
 
+import cn.cug.sxy.domain.trade.adaptor.port.ITradePort;
 import cn.cug.sxy.domain.trade.model.aggregate.TradePaySettlementAggregate;
 import cn.cug.sxy.domain.trade.model.entity.*;
-import cn.cug.sxy.domain.trade.repository.ITradeRepository;
+import cn.cug.sxy.domain.trade.adaptor.repository.ITradeRepository;
 import cn.cug.sxy.domain.trade.service.ITradeSettlementOrderService;
 import cn.cug.sxy.domain.trade.service.settelement.factory.TradeSettlementRuleFilterFactory;
 import cn.cug.sxy.types.design.framework.link.multitonModel.chain.BusinessLinkedList;
+import cn.cug.sxy.types.enums.NotifyTaskHTTPStatus;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @version 1.0
@@ -24,6 +30,9 @@ public class TradeSettlementOrderService implements ITradeSettlementOrderService
 
     @Resource
     private ITradeRepository repository;
+
+    @Resource
+    private ITradePort port;
 
     @Resource
     private TradeSettlementRuleFilterFactory tradeSettlementRuleFilterFactory;
@@ -59,6 +68,7 @@ public class TradeSettlementOrderService implements ITradeSettlementOrderService
                 .status(tradeSettlementRuleFilterBackEntity.getStatus())
                 .validStartTime(tradeSettlementRuleFilterBackEntity.getValidStartTime())
                 .validEndTime(tradeSettlementRuleFilterBackEntity.getValidEndTime())
+                .notifyUrl(tradeSettlementRuleFilterBackEntity.getNotifyUrl())
                 .build();
 
         // 3. 构建聚合对象
@@ -71,7 +81,11 @@ public class TradeSettlementOrderService implements ITradeSettlementOrderService
         // 4. 结算拼团订单
         repository.settlementMarketPayOrder(tradePaySettlementAggregate);
 
-        // 5. 返回结算信息
+        // 5. 拼团回调处理 - 处理失败也会有定时任务补偿，通过这样的方式，可以减轻任务调度，提高时效性
+        Map<String, Integer> notifyResultMap = execSettlementNotifyJob(groupBuyTeamEntity.getTeamId());
+        log.info("回调通知拼团完结 result:{}", JSON.toJSONString(notifyResultMap));
+
+        // 6. 返回结算信息
         return TradePaySettlementEntity.builder()
                 .source(tradePaySuccessEntity.getSource())
                 .channel(tradePaySuccessEntity.getChannel())
@@ -80,6 +94,51 @@ public class TradeSettlementOrderService implements ITradeSettlementOrderService
                 .activityId(groupBuyTeamEntity.getActivityId())
                 .outTradeNo(tradePaySuccessEntity.getOutTradeNo())
                 .build();
+    }
+
+    @Override
+    public Map<String, Integer> execSettlementNotifyJob() throws Exception {
+        List<NotifyTaskEntity> notifyTaskEntityList = repository.queryUnExecuteSuccessNotifyTaskList();
+        return execSettlementNotifyJob(notifyTaskEntityList);
+    }
+
+    @Override
+    public Map<String, Integer> execSettlementNotifyJob(String teamId) throws Exception {
+        List<NotifyTaskEntity> notifyTaskEntityList = repository.queryUnExecuteSuccessNotifyTaskList(teamId);
+        return execSettlementNotifyJob(notifyTaskEntityList);
+    }
+
+    private Map<String, Integer> execSettlementNotifyJob(List<NotifyTaskEntity> notifyTaskEntityList) throws Exception {
+        int successCount = 0, errorCount = 0, retryCount = 0;
+        for (NotifyTaskEntity notifyTaskEntity : notifyTaskEntityList) {
+            String response = port.groupBuyNotify(notifyTaskEntity);
+
+            if (NotifyTaskHTTPStatus.SUCCESS.getCode().equals(response)) {
+                int updateCount = repository.updateNotifyTaskStatusSuccess(notifyTaskEntity.getTeamId());
+                if (1 == updateCount) {
+                    successCount++;
+                }
+            } else if (NotifyTaskHTTPStatus.ERROR.getCode().equals(response)) {
+                if (notifyTaskEntity.getNotifyCount() < 5) {
+                    int updateCount = repository.updateNotifyTaskStatusRetry(notifyTaskEntity.getTeamId());
+                    if (1 == updateCount) {
+                        retryCount++;
+                    }
+                } else {
+                    int updateCount = repository.updateNotifyTaskStatusError(notifyTaskEntity.getTeamId());
+                    if (1 == updateCount) {
+                        errorCount++;
+                    }
+                }
+            }
+        }
+        Map<String, Integer> resultMap = new HashMap<>();
+        resultMap.put("waitCount", notifyTaskEntityList.size());
+        resultMap.put("successCount", successCount);
+        resultMap.put("errorCount", errorCount);
+        resultMap.put("retryCount", retryCount);
+
+        return resultMap;
     }
 
 }
