@@ -6,6 +6,7 @@
         <id column="id" property="id"/>
         <result column="team_id" property="teamId"/>
         <result column="activity_id" property="activityId"/>
+        <result column="goods_id" property="goodsId"/>
         <result column="source" property="source"/>
         <result column="channel" property="channel"/>
         <result column="original_price" property="originalPrice"/>
@@ -25,6 +26,7 @@
     <select id="queryGroupBuyOrderByTeamId" parameterType="java.lang.String" resultMap="dataMap">
         select team_id,
                activity_id,
+               goods_id,
                source,
                channel,
                original_price,
@@ -41,11 +43,79 @@
         where team_id = #{teamId}
     </select>
 
+    <select id="queryOngoingGroupBuyOrderByTeamIds" parameterType="java.util.List" resultMap="dataMap">
+        select team_id,
+        activity_id,
+        goods_id,
+        source,
+        channel,
+        original_price,
+        discount_deduction,
+        pay_price,
+        target_count,
+        complete_count,
+        lock_count,
+        status,
+        valid_start_time,
+        valid_end_time,
+        notify_url
+        from group_buy_order
+        where status = 0
+        and team_id in
+        <foreach item="teamId" collection="teamIds" open="(" separator="," close=")">
+            #{teamId}
+        </foreach>
+        <![CDATA[
+        and target_count > lock_count
+        ]]>
+    </select>
+
+    <select id="queryCurrentGroupBuyTeams" parameterType="cn.cug.sxy.infrastructure.persistent.dao.po.GroupBuyOrder" resultMap="dataMap">
+        select team_id,
+               goods_id,
+               activity_id,
+               source,
+               channel,
+               original_price,
+               discount_deduction,
+               pay_price,
+               target_count,
+               complete_count,
+               lock_count,
+               status,
+               valid_start_time,
+               valid_end_time,
+               notify_url
+        from group_buy_order
+        where source = #{source}
+          and channel = #{channel}
+          and goods_id = #{goodsId}
+    </select>
+
+    <select id="queryTeamCompletedCount" parameterType="java.util.List" resultType="java.lang.Integer">
+        select count(id)
+        from group_buy_order
+        where status = 1
+        and team_id in
+        <foreach item="teamId" collection="teamIds" open="(" separator="," close=")">
+            #{teamId}
+        </foreach>
+    </select>
+
+    <select id="queryTotalTeamUserCount" parameterType="java.util.List" resultType="java.lang.Integer">
+        select sum(lock_count)
+        from group_buy_order
+        where team_id in
+        <foreach item="teamId" collection="teamIds" open="(" separator="," close=")">
+            #{teamId}
+        </foreach>
+    </select>
+
     <insert id="insertGroupBuyOrder" parameterType="cn.cug.sxy.infrastructure.persistent.dao.po.GroupBuyOrder">
-        insert into group_buy_order(team_id, activity_id, source, channel, original_price,
+        insert into group_buy_order(team_id, activity_id, goods_id, source, channel, original_price,
                                     discount_deduction, pay_price, target_count, complete_count, lock_count, status,
                                     valid_start_time, valid_end_time, notify_url, create_time, update_time)
-        values (#{teamId}, #{activityId}, #{source}, #{channel}, #{originalPrice},
+        values (#{teamId}, #{activityId}, #{goodsId}, #{source}, #{channel}, #{originalPrice},
                 #{discountDeduction}, #{payPrice}, #{targetCount}, #{completeCount}, #{lockCount}, 0, #{validStartTime},
                 #{validEndTime}, #{notifyUrl}, now(), now())
     </insert>

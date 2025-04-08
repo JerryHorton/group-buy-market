@@ -21,6 +21,10 @@ public interface IUserGroupBuyOrderDetailDao {
 
     List<String> queryGroupBuyOrderListOutTradeNo(String teamId);
 
+    List<UserGroupBuyOrderDetail> queryOwnOngoingUserGroupBuyOrderDetail(UserGroupBuyOrderDetail userGroupBuyOrderDetailReq);
+
+    List<UserGroupBuyOrderDetail> queryRandomOngoingUserGroupBuyOrderDetail(UserGroupBuyOrderDetail userGroupBuyOrderDetailReq);
+
     void insertGroupBuyOrderList(UserGroupBuyOrderDetail userGroupBuyOrderDetail);
 
     void updateUserGroupBuyOrderDetailStatus(UserGroupBuyOrderDetail userGroupBuyOrderDetailReq);

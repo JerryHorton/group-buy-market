@@ -2,6 +2,8 @@ package cn.cug.sxy.api;
 
 import cn.cug.sxy.api.dto.LockMarketPayOrderRequestDTO;
 import cn.cug.sxy.api.dto.LockMarketPayOrderResponseDTO;
+import cn.cug.sxy.api.dto.SettlementMarketPayOrderRequestDTO;
+import cn.cug.sxy.api.dto.SettlementMarketPayOrderResponseDTO;
 import cn.cug.sxy.api.response.Response;
 
 /**
@@ -13,6 +15,8 @@ import cn.cug.sxy.api.response.Response;
 
 public interface IMarketTradeService {
 
-    Response<LockMarketPayOrderResponseDTO> lockMarketPayOrder(LockMarketPayOrderRequestDTO lockMarketPayOrderRequestDTO) throws Exception ;
+    Response<LockMarketPayOrderResponseDTO> lockMarketPayOrder(LockMarketPayOrderRequestDTO requestDTO) throws Exception ;
+
+    Response<SettlementMarketPayOrderResponseDTO> settlementMarketPayOrder(SettlementMarketPayOrderRequestDTO requestDTO);
 
 }

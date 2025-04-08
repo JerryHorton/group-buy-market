@@ -34,6 +34,10 @@ public class GroupBuyOrder {
      */
     private Long activityId;
     /**
+     * 商品ID
+     */
+    private String goodsId;
+    /**
      * 渠道
      */
     private String source;

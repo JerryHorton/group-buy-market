@@ -70,7 +70,7 @@ CREATE TABLE `crowd_tags` (
 
 LOCK TABLES `crowd_tags` WRITE;
 /*!40000 ALTER TABLE `crowd_tags` DISABLE KEYS */;
-INSERT INTO `crowd_tags` VALUES (1,'TAG_0001','潜在消费用户','潜在消费用户',2,'2025-03-30 11:36:03','2025-03-30 21:20:39');
+INSERT INTO `crowd_tags` VALUES (1,'TAG_0001','潜在消费用户','潜在消费用户',4,'2025-03-30 11:36:03','2025-04-04 16:55:36');
 /*!40000 ALTER TABLE `crowd_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -89,7 +89,7 @@ CREATE TABLE `crowd_tags_detail` (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_tag_user` (`tag_id`,`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='人群标签明细';
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='人群标签明细';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -98,7 +98,7 @@ CREATE TABLE `crowd_tags_detail` (
 
 LOCK TABLES `crowd_tags_detail` WRITE;
 /*!40000 ALTER TABLE `crowd_tags_detail` DISABLE KEYS */;
-INSERT INTO `crowd_tags_detail` VALUES (7,'TAG_0001','user001','2025-03-30 21:20:39','2025-03-30 21:20:39'),(8,'TAG_0001','user002','2025-03-30 21:20:39','2025-03-30 21:20:39'),(9,'TAG_0002','user003','2025-03-30 21:23:42','2025-03-30 21:23:42');
+INSERT INTO `crowd_tags_detail` VALUES (12,'TAG_0001','user001','2025-04-04 16:55:36','2025-04-04 16:55:36'),(13,'TAG_0001','user002','2025-04-04 16:55:36','2025-04-04 16:55:36');
 /*!40000 ALTER TABLE `crowd_tags_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -131,7 +131,7 @@ CREATE TABLE `crowd_tags_job` (
 
 LOCK TABLES `crowd_tags_job` WRITE;
 /*!40000 ALTER TABLE `crowd_tags_job` DISABLE KEYS */;
-INSERT INTO `crowd_tags_job` VALUES (1,'TAG_0001','0001',0,'5','2025-03-30 11:37:21','2025-04-30 11:37:23',1,'2025-03-30 11:38:03','2025-03-30 21:14:55'),(3,'TAG_0002','0002',0,'10','2025-03-30 21:23:07','2025-04-30 21:23:09',0,'2025-03-30 21:23:12','2025-03-30 21:23:12');
+INSERT INTO `crowd_tags_job` VALUES (1,'TAG_0001','0001',0,'5','2025-03-30 11:37:21','2025-04-30 11:37:23',0,'2025-03-30 11:38:03','2025-04-04 16:53:26'),(3,'TAG_0002','0002',0,'10','2025-03-30 21:23:07','2025-04-30 21:23:09',0,'2025-03-30 21:23:12','2025-03-30 21:23:12');
 /*!40000 ALTER TABLE `crowd_tags_job` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -167,7 +167,7 @@ CREATE TABLE `group_buy_activity` (
 
 LOCK TABLES `group_buy_activity` WRITE;
 /*!40000 ALTER TABLE `group_buy_activity` DISABLE KEYS */;
-INSERT INTO `group_buy_activity` VALUES (1,20001,'测试活动','30001',1,3,3,15,1,'2025-03-28 21:15:20','2025-04-28 21:15:23','2025-03-28 21:16:31','2025-04-02 11:18:51');
+INSERT INTO `group_buy_activity` VALUES (1,20001,'测试活动','30001',1,3,2,15,1,'2025-03-28 21:15:20','2025-04-28 21:15:23','2025-03-28 21:16:31','2025-04-03 15:41:42');
 /*!40000 ALTER TABLE `group_buy_activity` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -224,11 +224,14 @@ CREATE TABLE `group_buy_order` (
   `complete_count` int NOT NULL COMMENT '完成数量',
   `lock_count` int NOT NULL COMMENT '锁单数量',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态（0-拼单中、1-完成、2-失败）',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `valid_start_time` datetime NOT NULL COMMENT '拼团开始时间',
+  `valid_end_time` datetime NOT NULL COMMENT '拼团结束时间',
+  `notify_url` varchar(128) DEFAULT NULL COMMENT '回调接口',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_team_id` (`team_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='拼单订单';
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='拼单订单';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -237,51 +240,39 @@ CREATE TABLE `group_buy_order` (
 
 LOCK TABLES `group_buy_order` WRITE;
 /*!40000 ALTER TABLE `group_buy_order` DISABLE KEYS */;
-INSERT INTO `group_buy_order` VALUES (2,'zSNNwzQK',20001,'SOURCE_001','CHANNEL_001',100.00,20.00,80.00,3,0,2,0,'2025-03-31 22:40:54','2025-04-02 12:16:02'),(4,'qUWFqAWe',20001,'SOURCE_001','CHANNEL_001',100.00,20.00,80.00,3,0,1,0,'2025-03-31 23:54:25','2025-04-02 12:16:02'),(8,'UXDPnVLR',20001,'SOURCE_001','CHANNEL_001',100.00,20.00,80.00,3,0,1,0,'2025-04-02 11:07:05','2025-04-02 12:16:02'),(9,'AJhqXVvo',20001,'SOURCE_001','CHANNEL_001',100.00,20.00,80.00,3,0,1,0,'2025-04-02 11:18:53','2025-04-02 12:16:02'),(11,'yGetPSIm',20001,'SOURCE_001','CHANNEL_001',100.00,20.00,80.00,3,0,1,0,'2025-04-02 12:15:21','2025-04-02 12:15:21');
+INSERT INTO `group_buy_order` VALUES (21,'ELOaZTIK',20001,'SOURCE_001','CHANNEL_001',100.00,20.00,80.00,2,2,2,1,'2025-04-05 16:52:07','2025-04-05 17:17:07','http://localhost:8091/api/v1/test/group_buy_notify','2025-04-05 17:12:23','2025-04-05 16:52:07'),(22,'BESFzxIr',20001,'SOURCE_001','CHANNEL_001',100.00,20.00,80.00,2,0,1,0,'2025-04-05 16:52:45','2025-04-05 17:07:45','http://localhost:8091/api/v1/test/group_buy_notify','2025-04-05 16:52:45','2025-04-05 16:52:45');
 /*!40000 ALTER TABLE `group_buy_order` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `group_buy_order_list`
+-- Table structure for table `notify_task`
 --
 
-DROP TABLE IF EXISTS user_group_buy_order_detail;
+DROP TABLE IF EXISTS `notify_task`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `group_buy_order_list` (
+CREATE TABLE `notify_task` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '自增ID',
-  `user_id` varchar(64) NOT NULL COMMENT '用户ID',
-  `team_id` varchar(8) NOT NULL COMMENT '拼单组队ID',
-  `order_id` varchar(12) NOT NULL COMMENT '订单ID',
   `activity_id` bigint NOT NULL COMMENT '活动ID',
-  `start_time` datetime NOT NULL COMMENT '活动开始时间',
-  `end_time` datetime NOT NULL COMMENT '活动结束时间',
-  `goods_id` varchar(16) NOT NULL COMMENT '商品ID',
-  `source` varchar(12) NOT NULL COMMENT '渠道',
-  `channel` varchar(12) NOT NULL COMMENT '来源',
-  `original_price` decimal(8,2) NOT NULL COMMENT '原始价格',
-  `pay_price` decimal(8,2) DEFAULT NULL COMMENT '支付金额',
-  `discount_deduction` decimal(8,2) NOT NULL COMMENT '折扣扣除的金额',
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态；0初始锁定、1消费完成',
-  `out_trade_no` varchar(12) NOT NULL COMMENT '外部交易单号-确保外部调用唯一幂等',
-  `biz_id` varchar(64) NOT NULL COMMENT '业务唯一ID',
+  `team_id` varchar(8) NOT NULL COMMENT '拼单组队ID',
+  `notify_url` varchar(128) NOT NULL COMMENT '回调接口',
+  `notify_count` int NOT NULL COMMENT '回调次数',
+  `notify_status` tinyint(1) NOT NULL COMMENT '回调状态【0初始、1完成、2重试、3失败】',
+  `parameter_json` varchar(256) NOT NULL COMMENT '参数对象',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uq_order_id` (`order_id`),
-  UNIQUE KEY `uq_out_trade_no` (`out_trade_no`),
-  UNIQUE KEY `uq_biz_id` (`biz_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='拼单明细';
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `group_buy_order_list`
+-- Dumping data for table `notify_task`
 --
 
-LOCK TABLES user_group_buy_order_detail WRITE;
-/*!40000 ALTER TABLE user_group_buy_order_detail DISABLE KEYS */;
-INSERT INTO user_group_buy_order_detail VALUES (1,'user001','zSNNwzQK','707917163738',20001,'2025-03-28 21:15:20','2025-04-28 21:15:23','10001','SOURCE_001','CHANNEL_001',100.00,80.00,20.00,0,'2010300907','1','2025-03-31 22:40:54','2025-04-02 11:57:40'),(3,'user002','qUWFqAWe','960844371445',20001,'2025-03-28 21:15:20','2025-04-28 21:15:23','10001','SOURCE_001','CHANNEL_001',100.00,80.00,20.00,0,'2010300908','2','2025-03-31 23:54:25','2025-04-02 11:57:40'),(4,'user002','zSNNwzQK','673884257848',20001,'2025-03-28 21:15:20','2025-04-28 21:15:23','10001','SOURCE_001','CHANNEL_001',100.00,80.00,20.00,0,'2010300909','3','2025-03-31 23:54:58','2025-04-02 11:57:40'),(7,'user002','UXDPnVLR','239209687907',20001,'2025-03-28 21:15:20','2025-04-28 21:15:23','10001','SOURCE_001','CHANNEL_001',100.00,80.00,20.00,0,'2010300910','20001_user002_3','2025-04-02 11:07:05','2025-04-02 11:57:40'),(8,'user003','AJhqXVvo','695108540208',20001,'2025-03-28 21:15:20','2025-04-28 21:15:23','10001','SOURCE_001','CHANNEL_001',100.00,80.00,20.00,0,'2010300912','20001_user003_1','2025-04-02 11:18:53','2025-04-02 11:57:40'),(9,'user003','yGetPSIm','869327888973',20001,'2025-03-28 21:15:20','2025-04-28 21:15:23','10001','SOURCE_001','CHANNEL_001',100.00,80.00,20.00,0,'2010300913','20001_user003_2','2025-04-02 12:15:21','2025-04-02 12:15:21');
-/*!40000 ALTER TABLE user_group_buy_order_detail ENABLE KEYS */;
+LOCK TABLES `notify_task` WRITE;
+/*!40000 ALTER TABLE `notify_task` DISABLE KEYS */;
+INSERT INTO `notify_task` VALUES (5,20001,'ELOaZTIK','http://localhost:8091/api/v1/test/group_buy_notify',2,1,'{\"teamId\":\"ELOaZTIK\",\"outTradeNoList\":[\"2010300907\",\"2010300909\"]}','2025-04-05 17:12:23','2025-04-05 17:14:15');
+/*!40000 ALTER TABLE `notify_task` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -344,6 +335,50 @@ LOCK TABLES `sku` WRITE;
 INSERT INTO `sku` VALUES (1,'SOURCE_001','CHANNEL_001','10001','测试商品',100.00,'2025-03-28 21:28:54','2025-03-28 21:28:54');
 /*!40000 ALTER TABLE `sku` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `user_group_buy_order_detail`
+--
+
+DROP TABLE IF EXISTS `user_group_buy_order_detail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_group_buy_order_detail` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `user_id` varchar(64) NOT NULL COMMENT '用户ID',
+  `team_id` varchar(8) NOT NULL COMMENT '拼单组队ID',
+  `order_id` varchar(12) NOT NULL COMMENT '订单ID',
+  `activity_id` bigint NOT NULL COMMENT '活动ID',
+  `start_time` datetime NOT NULL COMMENT '活动开始时间',
+  `end_time` datetime NOT NULL COMMENT '活动结束时间',
+  `goods_id` varchar(16) NOT NULL COMMENT '商品ID',
+  `source` varchar(12) NOT NULL COMMENT '渠道',
+  `channel` varchar(12) NOT NULL COMMENT '来源',
+  `original_price` decimal(8,2) NOT NULL COMMENT '原始价格',
+  `pay_price` decimal(8,2) DEFAULT NULL COMMENT '支付金额',
+  `discount_deduction` decimal(8,2) NOT NULL COMMENT '折扣扣除的金额',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态；0初始锁定、1消费完成',
+  `out_trade_no` varchar(12) NOT NULL COMMENT '外部交易单号-确保外部调用唯一幂等',
+  `out_trade_time` datetime DEFAULT NULL COMMENT '外部交易时间',
+  `biz_id` varchar(64) NOT NULL COMMENT '业务唯一ID',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_order_id` (`order_id`),
+  UNIQUE KEY `uq_out_trade_no` (`out_trade_no`),
+  UNIQUE KEY `uq_biz_id` (`biz_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='拼单明细';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_group_buy_order_detail`
+--
+
+LOCK TABLES `user_group_buy_order_detail` WRITE;
+/*!40000 ALTER TABLE `user_group_buy_order_detail` DISABLE KEYS */;
+INSERT INTO `user_group_buy_order_detail` VALUES (20,'user001','ELOaZTIK','920343924203',20001,'2025-03-28 21:15:20','2025-04-28 21:15:23','10001','SOURCE_001','CHANNEL_001',100.00,80.00,20.00,1,'2010300907','2025-04-05 16:55:08','20001_user001_1','2025-04-05 16:55:08','2025-04-05 16:52:07'),(21,'user002','BESFzxIr','190964486656',20001,'2025-03-28 21:15:20','2025-04-28 21:15:23','10001','SOURCE_001','CHANNEL_001',100.00,80.00,20.00,0,'2010300908',NULL,'20001_user002_1','2025-04-05 16:52:45','2025-04-05 16:52:45'),(22,'user002','ELOaZTIK','729166336003',20001,'2025-03-28 21:15:20','2025-04-28 21:15:23','10001','SOURCE_001','CHANNEL_001',100.00,80.00,20.00,1,'2010300909','2025-04-05 17:12:23','20001_user002_2','2025-04-05 17:12:23','2025-04-05 16:54:26');
+/*!40000 ALTER TABLE `user_group_buy_order_detail` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -354,4 +389,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-02 12:59:14
+-- Dump completed on 2025-04-07 10:13:21

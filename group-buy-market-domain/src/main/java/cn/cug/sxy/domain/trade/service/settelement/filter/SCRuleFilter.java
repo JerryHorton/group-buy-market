@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 /**
  * @version 1.0
  * @Date 2025/4/4 14:32
- * @Description
+ * @Description 黑名单渠道过滤
  * @Author Sxy
  */
 

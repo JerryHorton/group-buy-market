@@ -174,6 +174,7 @@ public class TradeRepository implements ITradeRepository {
             GroupBuyOrder groupBuyOrder = GroupBuyOrder.builder()
                     .teamId(teamId)
                     .activityId(payActivityEntity.getActivityId())
+                    .goodsId(payDiscountEntity.getGoodsId())
                     .source(payDiscountEntity.getSource())
                     .channel(payDiscountEntity.getChannel())
                     .originalPrice(payDiscountEntity.getOriginalPrice())

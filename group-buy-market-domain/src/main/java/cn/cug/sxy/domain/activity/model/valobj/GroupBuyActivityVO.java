@@ -12,7 +12,7 @@ import java.util.Map;
  * @Author jerryhotton
  */
 
-@Data
+@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
