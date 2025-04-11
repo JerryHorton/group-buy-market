@@ -220,6 +220,8 @@ public class TradeRepository implements ITradeRepository {
             userGroupBuyOrderDetailDao.insertGroupBuyOrderList(userGroupBuyOrderDetail);
         } catch (DuplicateKeyException e) {
             throw new AppException(ResponseCode.INDEX_EXCEPTION.getCode(), ResponseCode.INDEX_EXCEPTION.getInfo(), e);
+        } catch (Exception e) {
+            throw new AppException("写入拼团记录失败", e);
         }
         return MarketPayOrderEntity.builder()
                 .orderId(orderId)

@@ -21,10 +21,6 @@ public class LockMarketPayOrderRequestDTO {
      */
     private String teamId;
     /**
-     * 活动ID
-     */
-    private Long activityId;
-    /**
      * 商品ID
      */
     private String goodsId;

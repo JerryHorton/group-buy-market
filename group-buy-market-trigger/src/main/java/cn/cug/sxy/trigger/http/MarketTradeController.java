@@ -56,7 +56,6 @@ public class MarketTradeController implements IMarketTradeService {
             String source = requestDTO.getSource();
             String channel = requestDTO.getChannel();
             String goodsId = requestDTO.getGoodsId();
-            Long activityId = requestDTO.getActivityId();
             String outTradeNo = requestDTO.getOutTradeNo();
             String teamId = requestDTO.getTeamId();
             String notifyUrl = requestDTO.getNotifyUrl();
@@ -64,8 +63,7 @@ public class MarketTradeController implements IMarketTradeService {
             if (StringUtils.isBlank(userId) || StringUtils.isBlank(source) ||
                     StringUtils.isBlank(channel) || StringUtils.isBlank(goodsId) ||
                     StringUtils.isBlank(goodsId) || StringUtils.isBlank(outTradeNo) ||
-                    StringUtils.isBlank(notifyUrl) ||
-                    null == activityId) {
+                    StringUtils.isBlank(notifyUrl)) {
                 return Response.<LockMarketPayOrderResponseDTO>builder()
                         .code(ResponseCode.ILLEGAL_PARAMETER.getCode())
                         .info(ResponseCode.ILLEGAL_PARAMETER.getInfo())
@@ -76,11 +74,14 @@ public class MarketTradeController implements IMarketTradeService {
             if (null != marketPayOrderEntity) {
                 LockMarketPayOrderResponseDTO lockMarketPayOrderResponseDTO = LockMarketPayOrderResponseDTO.builder()
                         .orderId(marketPayOrderEntity.getOrderId())
-                        .discountedPrice(marketPayOrderEntity.getPayPrice())
+                        .originalPrice(marketPayOrderEntity.getOriginalPrice())
+                        .payPrice(marketPayOrderEntity.getPayPrice())
+                        .discountDeduction(marketPayOrderEntity.getDiscountDeduction())
                         .tradeOrderStatus(marketPayOrderEntity.getTradeOrderStatusVO().getCode())
                         .build();
 
                 log.info("交易锁单记录(存在):{} marketPayOrderEntity:{}", userId, JSON.toJSONString(marketPayOrderEntity));
+
                 return Response.<LockMarketPayOrderResponseDTO>builder()
                         .code(ResponseCode.SUCCESS.getCode())
                         .info(ResponseCode.SUCCESS.getInfo())
@@ -111,7 +112,7 @@ public class MarketTradeController implements IMarketTradeService {
                     UserEntity.builder().userId(userId).build(),
                     PayActivityEntity.builder()
                             .teamId(teamId)
-                            .activityId(activityId)
+                            .activityId(groupBuyActivityVO.getActivityId())
                             .activityName(groupBuyActivityVO.getActivityName())
                             .startTime(groupBuyActivityVO.getStartTime())
                             .endTime(groupBuyActivityVO.getEndTime())
@@ -135,7 +136,9 @@ public class MarketTradeController implements IMarketTradeService {
                     .info(ResponseCode.SUCCESS.getInfo())
                     .data(LockMarketPayOrderResponseDTO.builder()
                             .orderId(marketPayOrderEntity.getOrderId())
-                            .discountedPrice(marketPayOrderEntity.getPayPrice())
+                            .originalPrice(marketPayOrderEntity.getOriginalPrice())
+                            .payPrice(marketPayOrderEntity.getPayPrice())
+                            .discountDeduction(marketPayOrderEntity.getDiscountDeduction())
                             .tradeOrderStatus(marketPayOrderEntity.getTradeOrderStatusVO().getCode())
                             .build())
                     .build();
@@ -153,7 +156,6 @@ public class MarketTradeController implements IMarketTradeService {
                     .build();
         }
     }
-
 
     @RequestMapping(value = "settlement_market_pay_order", method = RequestMethod.POST)
     @Override
