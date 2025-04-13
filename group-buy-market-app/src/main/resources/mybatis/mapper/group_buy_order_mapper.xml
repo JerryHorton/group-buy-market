@@ -18,7 +18,8 @@
         <result column="status" property="status"/>
         <result column="valid_start_time" property="validStartTime"/>
         <result column="valid_end_time" property="validEndTime"/>
-        <result column="notify_url" property="notifyUrl"/>
+        <result column="notify_type" property="notifyType"/>
+        <result column="notify_target" property="notifyTarget"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
@@ -38,7 +39,8 @@
                status,
                valid_start_time,
                valid_end_time,
-               notify_url
+               notify_type,
+               notify_target
         from group_buy_order
         where team_id = #{teamId}
     </select>
@@ -58,7 +60,8 @@
         status,
         valid_start_time,
         valid_end_time,
-        notify_url
+        notify_type,
+        notify_target
         from group_buy_order
         where status = 0
         <if test="teamIds != null and teamIds.size() > 0">
@@ -88,7 +91,8 @@
                status,
                valid_start_time,
                valid_end_time,
-               notify_url
+               notify_type,
+               notify_target
         from group_buy_order
         where source = #{source}
           and channel = #{channel}
@@ -117,10 +121,11 @@
     <insert id="insertGroupBuyOrder" parameterType="cn.cug.sxy.infrastructure.persistent.dao.po.GroupBuyOrder">
         insert into group_buy_order(team_id, activity_id, goods_id, source, channel, original_price,
                                     discount_deduction, pay_price, target_count, complete_count, lock_count, status,
-                                    valid_start_time, valid_end_time, notify_url, create_time, update_time)
+                                    valid_start_time, valid_end_time, notify_type, notify_target, create_time,
+                                    update_time)
         values (#{teamId}, #{activityId}, #{goodsId}, #{source}, #{channel}, #{originalPrice},
                 #{discountDeduction}, #{payPrice}, #{targetCount}, #{completeCount}, #{lockCount}, 0, #{validStartTime},
-                #{validEndTime}, #{notifyUrl}, now(), now())
+                #{validEndTime}, #{notifyType}, #{notifyTarget}, now(), now())
     </insert>
 
     <update id="updateAddLockCount" parameterType="java.lang.String">

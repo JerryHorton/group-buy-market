@@ -37,8 +37,12 @@ public class LockMarketPayOrderRequestDTO {
      */
     private String outTradeNo;
     /**
-     * 拼团成功回调接口
+     * 回调类型（HTTP、MQ）
      */
-    private String notifyUrl;
+    private String notifyType;
+    /**
+     * 回调目标（url or topic）
+     */
+    private String notifyTarget;
 
 }

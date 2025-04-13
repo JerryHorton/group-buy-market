@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public enum NotifyTaskHTTPStatus {
+public enum NotifyTaskStatus {
 
     SUCCESS("success", "成功"),
     ERROR("error", "失败"),

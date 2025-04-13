@@ -3,7 +3,7 @@ package cn.cug.sxy.domain.trade.adaptor.repository;
 import cn.cug.sxy.domain.trade.model.aggregate.GroupBuyOrderAggregate;
 import cn.cug.sxy.domain.trade.model.aggregate.TradePaySettlementAggregate;
 import cn.cug.sxy.domain.trade.model.entity.GroupBuyActivityEntity;
-import cn.cug.sxy.domain.trade.model.entity.GroupBuyTeamEntity;
+import cn.cug.sxy.domain.trade.model.entity.GroupBuyOrderEntity;
 import cn.cug.sxy.domain.trade.model.entity.MarketPayOrderEntity;
 import cn.cug.sxy.domain.trade.model.entity.NotifyTaskEntity;
 import cn.cug.sxy.domain.trade.model.valobj.GroupBuyProgressVO;
@@ -27,7 +27,7 @@ public interface ITradeRepository {
 
     Integer queryActivityParticipationCount(String userId, Long activityId);
 
-    GroupBuyTeamEntity queryGroupBuyTeamByTeamByTeamId(String teamId);
+    GroupBuyOrderEntity queryGroupBuyTeamByTeamByTeamId(String teamId);
 
     List<NotifyTaskEntity> queryUnExecuteSuccessNotifyTaskList();
 
@@ -35,7 +35,7 @@ public interface ITradeRepository {
 
     MarketPayOrderEntity lockMarketPayOrder(GroupBuyOrderAggregate groupBuyOrderAggregate);
 
-    void settlementMarketPayOrder(TradePaySettlementAggregate tradePaySettlementAggregate);
+    NotifyTaskEntity settlementMarketPayOrder(TradePaySettlementAggregate tradePaySettlementAggregate);
 
     Boolean isSCBlackListIntercept(String source, String channel);
 

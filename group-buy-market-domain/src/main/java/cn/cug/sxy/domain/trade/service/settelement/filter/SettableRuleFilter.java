@@ -1,6 +1,6 @@
 package cn.cug.sxy.domain.trade.service.settelement.filter;
 
-import cn.cug.sxy.domain.trade.model.entity.GroupBuyTeamEntity;
+import cn.cug.sxy.domain.trade.model.entity.GroupBuyOrderEntity;
 import cn.cug.sxy.domain.trade.model.entity.MarketPayOrderEntity;
 import cn.cug.sxy.domain.trade.model.entity.TradeSettlementRuleCommandEntity;
 import cn.cug.sxy.domain.trade.model.entity.TradeSettlementRuleFilterBackEntity;
@@ -33,15 +33,15 @@ public class SettableRuleFilter implements ILogicHandler<TradeSettlementRuleComm
     public TradeSettlementRuleFilterBackEntity apply(TradeSettlementRuleCommandEntity requestParameter, TradeSettlementRuleFilterFactory.DynamicContext dynamicContext) throws Exception {
         log.info("结算规则过滤-有效时间校验, userId:{} outTradeNo:{}", requestParameter.getUserId(), requestParameter.getOutTradeNo());
         MarketPayOrderEntity marketPayOrderEntity = dynamicContext.getMarketPayOrderEntity();
-        GroupBuyTeamEntity groupBuyTeamEntity = repository.queryGroupBuyTeamByTeamByTeamId(marketPayOrderEntity.getTeamId());
+        GroupBuyOrderEntity groupBuyOrderEntity = repository.queryGroupBuyTeamByTeamByTeamId(marketPayOrderEntity.getTeamId());
 
         Date outTradeTime = requestParameter.getOutTradeTime();
-        if (outTradeTime.after(groupBuyTeamEntity.getValidEndTime())) {
+        if (outTradeTime.after(groupBuyOrderEntity.getValidEndTime())) {
             log.error("拼团交易-结算营销拼团订单失败, 拼团时间已过期, userId:{} outTradeNo:{}", requestParameter.getUserId(), requestParameter.getOutTradeNo());
             throw new AppException(ResponseCode.E0106);
         }
 
-        dynamicContext.setGroupBuyTeamEntity(groupBuyTeamEntity);
+        dynamicContext.setGroupBuyOrderEntity(groupBuyOrderEntity);
 
         return next(requestParameter, dynamicContext);
     }

@@ -1,6 +1,6 @@
 package cn.cug.sxy.domain.trade.service.settelement.filter;
 
-import cn.cug.sxy.domain.trade.model.entity.GroupBuyTeamEntity;
+import cn.cug.sxy.domain.trade.model.entity.GroupBuyOrderEntity;
 import cn.cug.sxy.domain.trade.model.entity.TradeSettlementRuleCommandEntity;
 import cn.cug.sxy.domain.trade.model.entity.TradeSettlementRuleFilterBackEntity;
 import cn.cug.sxy.domain.trade.service.settelement.factory.TradeSettlementRuleFilterFactory;
@@ -23,18 +23,19 @@ public class EndRuleFilter implements ILogicHandler<TradeSettlementRuleCommandEn
     public TradeSettlementRuleFilterBackEntity apply(TradeSettlementRuleCommandEntity requestParameter, TradeSettlementRuleFilterFactory.DynamicContext dynamicContext) throws Exception {
         log.info("结算规则过滤-结束放行, userId:{} outTradeNo:{}", requestParameter.getUserId(), requestParameter.getOutTradeNo());
 
-        GroupBuyTeamEntity groupBuyTeamEntity = dynamicContext.getGroupBuyTeamEntity();
+        GroupBuyOrderEntity groupBuyOrderEntity = dynamicContext.getGroupBuyOrderEntity();
 
         return TradeSettlementRuleFilterBackEntity.builder()
-                .teamId(groupBuyTeamEntity.getTeamId())
-                .activityId(groupBuyTeamEntity.getActivityId())
-                .targetCount(groupBuyTeamEntity.getTargetCount())
-                .completeCount(groupBuyTeamEntity.getCompleteCount())
-                .lockCount(groupBuyTeamEntity.getLockCount())
-                .status(groupBuyTeamEntity.getStatus())
-                .validStartTime(groupBuyTeamEntity.getValidStartTime())
-                .validEndTime(groupBuyTeamEntity.getValidEndTime())
-                .notifyUrl(groupBuyTeamEntity.getNotifyUrl())
+                .teamId(groupBuyOrderEntity.getTeamId())
+                .activityId(groupBuyOrderEntity.getActivityId())
+                .targetCount(groupBuyOrderEntity.getTargetCount())
+                .completeCount(groupBuyOrderEntity.getCompleteCount())
+                .lockCount(groupBuyOrderEntity.getLockCount())
+                .status(groupBuyOrderEntity.getStatus())
+                .validStartTime(groupBuyOrderEntity.getValidStartTime())
+                .validEndTime(groupBuyOrderEntity.getValidEndTime())
+                .notifyType(groupBuyOrderEntity.getNotifyType())
+                .notifyTarget(groupBuyOrderEntity.getNotifyTarget())
                 .build();
     }
 

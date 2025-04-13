@@ -2,14 +2,18 @@ package cn.cug.sxy.infrastructure.persistent.adaptor.port;
 
 import cn.cug.sxy.domain.trade.adaptor.port.ISmallPayMallPort;
 import cn.cug.sxy.domain.trade.model.entity.NotifyTaskEntity;
+import cn.cug.sxy.infrastructure.persistent.adaptor.port.strategy.INotifyStrategy;
 import cn.cug.sxy.infrastructure.persistent.gateway.GroupBuyNotifyService;
 import cn.cug.sxy.infrastructure.persistent.redis.IRedisService;
-import cn.cug.sxy.types.enums.NotifyTaskHTTPStatus;
+import cn.cug.sxy.types.common.Constants;
+import cn.cug.sxy.types.enums.NotifyTaskStatus;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -22,8 +26,13 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class SmallPayMallAppPort implements ISmallPayMallPort {
 
-    @Resource
-    private GroupBuyNotifyService groupBuyNotifyService;
+    private final String notifyTaskKey = "GroupBuyNotify";
+
+    private final Map<String, INotifyStrategy> notifyStrategyMap;
+
+    public SmallPayMallAppPort(Map<String, INotifyStrategy> notifyStrategyMap) {
+        this.notifyStrategyMap = notifyStrategyMap;
+    }
 
     @Resource
     private IRedisService redisService;
@@ -34,15 +43,15 @@ public class SmallPayMallAppPort implements ISmallPayMallPort {
         try {
             if (lock.tryLock(3, 0, TimeUnit.SECONDS)) {
                 try {
-                    // 二次校验是否已处理
-                    if (redisService.isExists(notifyTaskEntity.doneKey())) {
-                        return NotifyTaskHTTPStatus.SUCCESS.getCode();
+                    // 二次校验是否已处理 或 无效的 notifyUrl 则直接返回成功
+                    if (redisService.isExists(notifyTaskEntity.doneKey()) ||
+                            StringUtils.isBlank(notifyTaskEntity.getNotifyTarget())) {
+                        return NotifyTaskStatus.SUCCESS.getCode();
                     }
-                    // 无效的 notifyUrl 则直接返回成功
-                    if (StringUtils.isBlank(notifyTaskEntity.getNotifyUrl())) {
-                        return NotifyTaskHTTPStatus.SUCCESS.getCode();
-                    }
-                    String result = groupBuyNotifyService.groupBuyNotify(notifyTaskEntity.getNotifyUrl(), notifyTaskEntity.getParameterJson());
+                    // 根据策略执行回调
+                    String strategy = notifyTaskKey + Constants.UNDERLINE + notifyTaskEntity.getNotifyType();
+                    String result = notifyStrategyMap.get(strategy).notify(notifyTaskEntity.getNotifyTarget(), notifyTaskEntity.getParameterJson());
+                    // 标记回调完成
                     redisService.setValue(notifyTaskEntity.doneKey(), "1", 5 * 60 * 1000);
                     return result;
                 } finally {
@@ -51,10 +60,10 @@ public class SmallPayMallAppPort implements ISmallPayMallPort {
                     }
                 }
             }
-            return NotifyTaskHTTPStatus.NULL.getCode();
-        } catch (Exception e){
+            return NotifyTaskStatus.NULL.getCode();
+        } catch (Exception e) {
             Thread.currentThread().interrupt();
-            return NotifyTaskHTTPStatus.NULL.getCode();
+            return NotifyTaskStatus.NULL.getCode();
         }
     }
 

@@ -23,9 +23,13 @@ public class NotifyTaskEntity {
      */
     private String teamId;
     /**
-     * 回调接口
+     * 回调类型（HTTP、MQ）
      */
-    private String notifyUrl;
+    private String notifyType;
+    /**
+     * 回调目标（url or topic）
+     */
+    private String notifyTarget;
     /**
      * 回调次数
      */

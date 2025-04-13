@@ -1,6 +1,6 @@
 package cn.cug.sxy.domain.trade.service.settelement.factory;
 
-import cn.cug.sxy.domain.trade.model.entity.GroupBuyTeamEntity;
+import cn.cug.sxy.domain.trade.model.entity.GroupBuyOrderEntity;
 import cn.cug.sxy.domain.trade.model.entity.MarketPayOrderEntity;
 import cn.cug.sxy.domain.trade.model.entity.TradeSettlementRuleCommandEntity;
 import cn.cug.sxy.domain.trade.model.entity.TradeSettlementRuleFilterBackEntity;
@@ -58,7 +58,7 @@ public class TradeSettlementRuleFilterFactory {
 
         private MarketPayOrderEntity marketPayOrderEntity;
 
-        private GroupBuyTeamEntity groupBuyTeamEntity;
+        private GroupBuyOrderEntity groupBuyOrderEntity;
 
     }
 

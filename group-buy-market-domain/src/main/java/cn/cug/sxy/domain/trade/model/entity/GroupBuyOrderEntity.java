@@ -19,7 +19,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GroupBuyTeamEntity {
+public class GroupBuyOrderEntity {
 
     /**
      * 拼单组队ID
@@ -54,8 +54,12 @@ public class GroupBuyTeamEntity {
      */
     private Date validEndTime;
     /**
-     * 拼团成功回调接口
+     * 回调类型（HTTP、MQ）
      */
-    private String notifyUrl;
+    private String notifyType;
+    /**
+     * 回调目标（url or topic）
+     */
+    private String notifyTarget;
 
 }

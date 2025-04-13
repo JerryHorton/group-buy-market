@@ -1,7 +1,6 @@
 package cn.cug.sxy.domain.trade.model.aggregate;
 
-import cn.cug.sxy.domain.trade.model.entity.GroupBuyTeamEntity;
-import cn.cug.sxy.domain.trade.model.entity.MarketPayOrderEntity;
+import cn.cug.sxy.domain.trade.model.entity.GroupBuyOrderEntity;
 import cn.cug.sxy.domain.trade.model.entity.TradePaySuccessEntity;
 import cn.cug.sxy.domain.trade.model.entity.UserEntity;
 import lombok.AllArgsConstructor;
@@ -26,6 +25,6 @@ public class TradePaySettlementAggregate {
 
     private TradePaySuccessEntity tradePaySuccessEntity;
 
-    private GroupBuyTeamEntity groupBuyTeamEntity;
+    private GroupBuyOrderEntity groupBuyOrderEntity;
 
 }
