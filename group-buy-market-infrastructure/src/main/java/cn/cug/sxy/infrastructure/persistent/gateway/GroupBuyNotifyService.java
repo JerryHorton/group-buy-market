@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 /**
  * @version 1.0
  * @Date 2025/4/5 15:12
- * @Description 拼团回调服务
+ * @Description 支付商城服务API
  * @Author Sxy
  */
 
@@ -22,24 +22,36 @@ public class GroupBuyNotifyService {
     @Resource
     private OkHttpClient okHttpClient;
 
-    public String groupBuyNotify(String apiUrl, String notifyRequestDTOJSON) throws Exception {
-        try {
-            // 1. 构建参数
-            MediaType mediaType = MediaType.parse("application/json");
-            RequestBody body = RequestBody.create(mediaType, notifyRequestDTOJSON);
-            Request request = new Request.Builder()
-                    .url(apiUrl)
-                    .post(body)
-                    .addHeader("content-type", "application/json")
-                    .build();
+    /**
+     * 拼团通知回调请求
+     *
+     * @param apiUrl               回调地址
+     * @param notifyRequestDTOJSON 请求参数（JSON 格式）
+     * @return 回调接口的响应结果字符串
+     */
+    public String groupBuyNotify(String apiUrl, String notifyRequestDTOJSON) {
+        // 构建请求体
+        RequestBody body = RequestBody.create(
+                notifyRequestDTOJSON,
+                MediaType.get("application/json")
+        );
+        // 构建 HTTP 请求
+        Request request = new Request.Builder()
+                .url(apiUrl)
+                .post(body)
+                .header("Content-Type", "application/json")
+                .build();
 
-            // 2. 执行请求
-            Response response = okHttpClient.newCall(request).execute();
+        try (Response response = okHttpClient.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                log.warn("拼团回调请求失败，状态码：{}，url：{}", response.code(), apiUrl);
+                throw new AppException(ResponseCode.HTTP_EXCEPTION);
+            }
 
-            // 3. 返回结果
-            return response.body().string();
+            ResponseBody responseBody = response.body();
+            return responseBody != null ? responseBody.string() : "";
         } catch (Exception e) {
-            log.error("拼团回调 HTTP 接口服务异常 {}", apiUrl, e);
+            log.error("拼团回调 HTTP 接口服务异常：{}", apiUrl, e);
             throw new AppException(ResponseCode.HTTP_EXCEPTION);
         }
     }

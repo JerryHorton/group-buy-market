@@ -41,5 +41,4 @@ public class TradePaySuccessEntity {
      */
     private Date outTradeTime;
 
-
 }

@@ -39,7 +39,7 @@ public class TagRepository implements ITagRepository {
 
 
     @Override
-    public CrowdTagsJobEntity queryCrowdTagsJobEntity(String tagId, String batchId) {
+    public CrowdTagsJobEntity queryCrowdTagsJob(String tagId, String batchId) {
         CrowdTagsJob crowdTagsJobReq = new CrowdTagsJob();
         crowdTagsJobReq.setTagId(tagId);
         crowdTagsJobReq.setBatchId(batchId);

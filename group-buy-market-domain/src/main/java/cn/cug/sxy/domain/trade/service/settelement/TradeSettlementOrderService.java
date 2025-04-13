@@ -1,6 +1,6 @@
 package cn.cug.sxy.domain.trade.service.settelement;
 
-import cn.cug.sxy.domain.trade.adaptor.port.ITradePort;
+import cn.cug.sxy.domain.trade.adaptor.port.ISmallPayMallPort;
 import cn.cug.sxy.domain.trade.model.aggregate.TradePaySettlementAggregate;
 import cn.cug.sxy.domain.trade.model.entity.*;
 import cn.cug.sxy.domain.trade.adaptor.repository.ITradeRepository;
@@ -32,7 +32,7 @@ public class TradeSettlementOrderService implements ITradeSettlementOrderService
     private ITradeRepository repository;
 
     @Resource
-    private ITradePort port;
+    private ISmallPayMallPort port;
 
     @Resource
     private TradeSettlementRuleFilterFactory tradeSettlementRuleFilterFactory;
@@ -112,7 +112,6 @@ public class TradeSettlementOrderService implements ITradeSettlementOrderService
         int successCount = 0, errorCount = 0, retryCount = 0;
         for (NotifyTaskEntity notifyTaskEntity : notifyTaskEntityList) {
             String response = port.groupBuyNotify(notifyTaskEntity);
-
             if (NotifyTaskHTTPStatus.SUCCESS.getCode().equals(response)) {
                 int updateCount = repository.updateNotifyTaskStatusSuccess(notifyTaskEntity.getTeamId());
                 if (1 == updateCount) {
@@ -133,7 +132,7 @@ public class TradeSettlementOrderService implements ITradeSettlementOrderService
             }
         }
         Map<String, Integer> resultMap = new HashMap<>();
-        resultMap.put("waitCount", notifyTaskEntityList.size());
+        resultMap.put("waitCount", notifyTaskEntityList.size() - successCount);
         resultMap.put("successCount", successCount);
         resultMap.put("errorCount", errorCount);
         resultMap.put("retryCount", retryCount);

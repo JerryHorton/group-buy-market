@@ -31,7 +31,6 @@
             <artifactId>logging-interceptor</artifactId>
         </dependency>
 
-
         <!-- 系统模块 -->
         <dependency>
             <groupId>cn.cug.sxy</groupId>

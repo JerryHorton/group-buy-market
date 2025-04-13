@@ -39,4 +39,8 @@ public class NotifyTaskEntity {
         return "notify_job_lock_key_" + this.teamId;
     }
 
+    public String doneKey() {
+        return "notify_job_done_key_" + this.teamId;
+    }
+
 }

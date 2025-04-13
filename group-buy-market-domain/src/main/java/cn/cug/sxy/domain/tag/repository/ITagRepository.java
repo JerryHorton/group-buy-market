@@ -11,7 +11,7 @@ import cn.cug.sxy.domain.tag.model.entity.CrowdTagsJobEntity;
 
 public interface ITagRepository {
 
-    CrowdTagsJobEntity queryCrowdTagsJobEntity(String tagId, String batchId);
+    CrowdTagsJobEntity queryCrowdTagsJob(String tagId, String batchId);
 
     void addCrowdTagsDetail(String tagId, String userId);
 

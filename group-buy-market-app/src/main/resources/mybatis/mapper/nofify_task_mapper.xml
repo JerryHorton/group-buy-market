@@ -27,7 +27,7 @@
         notify_status,
         parameter_json
         from notify_task
-        where (notify_status = 0 or notify_status = 2)
+        where notify_status in (0, 2)
         <if test="teamId != null">
             and team_id = #{teamId}
         </if>
