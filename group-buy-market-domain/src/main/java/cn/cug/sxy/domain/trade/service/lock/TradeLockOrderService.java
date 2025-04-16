@@ -24,7 +24,7 @@ import javax.annotation.Resource;
 public class TradeLockOrderService implements ITradeLockOrderService {
 
     @Resource
-    private ITradeRepository tradeRepository;
+    private ITradeRepository repository;
 
     @Resource
     private TradeLockRuleFilterFactory tradeLockRuleFilterFactory;
@@ -32,13 +32,13 @@ public class TradeLockOrderService implements ITradeLockOrderService {
     @Override
     public MarketPayOrderEntity queryUnpaidMarketPayOrderByOutTradeNo(String userId, String outTradeNo) {
         log.info("拼团交易-查询未支付营销订单:{} outTradeNo:{}", userId, outTradeNo);
-        return tradeRepository.queryUnpaidMarketPayOrderByOutTradeNo(outTradeNo);
+        return repository.queryUnpaidMarketPayOrderByOutTradeNo(outTradeNo);
     }
 
     @Override
     public GroupBuyProgressVO queryGroupBuyProgress(String teamId) {
         log.info("拼团交易-查询拼单进度, teamId:{}", teamId);
-        return tradeRepository.queryGroupBuyProgress(teamId);
+        return repository.queryGroupBuyProgress(teamId);
     }
 
     @Override
@@ -50,6 +50,7 @@ public class TradeLockOrderService implements ITradeLockOrderService {
         TradeLockRuleFilterBackEntity tradeLockRuleFilterBackEntity = tradeRuleFilter.apply(TradeLockRuleCommandEntity.builder()
                 .userId(userEntity.getUserId())
                 .activityId(payActivityEntity.getActivityId())
+                .teamId(payActivityEntity.getTeamId())
                 .build(), new TradeLockRuleFilterFactory.DynamicContext());
 
         // 已参与拼团量 - 用于构建数据库唯一索引使用，确保用户只能在一个活动上参与固定的次数
@@ -63,7 +64,14 @@ public class TradeLockOrderService implements ITradeLockOrderService {
                 .userParticipationCount(userParticipationCount)
                 .build();
 
-        return tradeRepository.lockMarketPayOrder(groupBuyOrderAggregate);
+        try {
+            return repository.lockMarketPayOrder(groupBuyOrderAggregate);
+        } catch (Exception e) {
+            // 记录失败恢复量
+            repository.recoveryTeamStock(tradeLockRuleFilterBackEntity.getRecoveryTeamStockKey());
+            throw e;
+        }
+
     }
 
 }

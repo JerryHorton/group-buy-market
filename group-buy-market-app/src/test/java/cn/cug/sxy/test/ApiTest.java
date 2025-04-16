@@ -1,6 +1,6 @@
 package cn.cug.sxy.test;
 
-import cn.cug.sxy.infrastructure.event.GroupBuyAbstractEventPublisher;
+import cn.cug.sxy.infrastructure.event.GroupBuyEventPublisher;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +17,7 @@ import java.util.concurrent.CountDownLatch;
 public class ApiTest {
 
     @Resource
-    private GroupBuyAbstractEventPublisher publisher;
+    private GroupBuyEventPublisher publisher;
 
     @Value("${spring.rabbitmq.config.producer.topic_team_success.routing_key}")
     private String routingKey;

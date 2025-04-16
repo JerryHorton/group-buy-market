@@ -1,7 +1,7 @@
 package cn.cug.sxy.test.domain.tag;
 
 import cn.cug.sxy.domain.tag.service.ITagService;
-import cn.cug.sxy.infrastructure.persistent.redis.IRedisService;
+import cn.cug.sxy.infrastructure.redis.IRedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;

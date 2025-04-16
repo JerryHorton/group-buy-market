@@ -22,5 +22,9 @@ public class TradeLockRuleFilterBackEntity {
      * 用户参与活动的订单量
      */
     private Integer userParticipationCount;
+    /**
+     * 记录失败占用（恢复量）
+     */
+    private String recoveryTeamStockKey;
 
 }

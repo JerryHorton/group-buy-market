@@ -1,7 +1,7 @@
 package cn.cug.sxy.test.infrastructure.dao;
 
-import cn.cug.sxy.infrastructure.persistent.dao.IGroupBuyDiscountDao;
-import cn.cug.sxy.infrastructure.persistent.dao.po.GroupBuyDiscount;
+import cn.cug.sxy.infrastructure.dao.IGroupBuyDiscountDao;
+import cn.cug.sxy.infrastructure.dao.po.GroupBuyDiscount;
 import com.alibaba.fastjson2.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;

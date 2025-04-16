@@ -45,4 +45,8 @@ public interface ITradeRepository {
 
     int updateNotifyTaskStatusError(String teamId);
 
+    boolean occupyTeamStock(String teamStockKey, String recoveryTeamStockKey, Integer targetCount, Integer validTime);
+
+    void recoveryTeamStock(String recoveryTeamStockKey);
+
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.cug.sxy.infrastructure.persistent.dao.IUserGroupBuyOrderDetailDao">
+<mapper namespace="cn.cug.sxy.infrastructure.dao.IUserGroupBuyOrderDetailDao">
 
-    <resultMap id="dataMap" type="cn.cug.sxy.infrastructure.persistent.dao.po.UserGroupBuyOrderDetail">
+    <resultMap id="dataMap" type="cn.cug.sxy.infrastructure.dao.po.UserGroupBuyOrderDetail">
         <id column="id" property="id"/>
         <result column="user_id" property="userId"/>
         <result column="team_id" property="teamId"/>
@@ -25,7 +25,7 @@
     </resultMap>
 
     <select id="queryUnpaidMarketPayOrderByOutTradeNo"
-            parameterType="cn.cug.sxy.infrastructure.persistent.dao.po.UserGroupBuyOrderDetail" resultMap="dataMap">
+            parameterType="cn.cug.sxy.infrastructure.dao.po.UserGroupBuyOrderDetail" resultMap="dataMap">
         select team_id,
                order_id,
                original_price,
@@ -38,7 +38,7 @@
     </select>
 
     <select id="queryUserActivityParticipationOrderLists"
-            parameterType="cn.cug.sxy.infrastructure.persistent.dao.po.UserGroupBuyOrderDetail" resultMap="dataMap">
+            parameterType="cn.cug.sxy.infrastructure.dao.po.UserGroupBuyOrderDetail" resultMap="dataMap">
         select user_id,
                team_id,
                order_id,
@@ -67,7 +67,7 @@
         where team_id = #{teamId}
     </select>
 
-    <select id="queryOwnOngoingUserGroupBuyOrderDetail" parameterType="cn.cug.sxy.infrastructure.persistent.dao.po.UserGroupBuyOrderDetail" resultMap="dataMap">
+    <select id="queryOwnOngoingUserGroupBuyOrderDetail" parameterType="cn.cug.sxy.infrastructure.dao.po.UserGroupBuyOrderDetail" resultMap="dataMap">
         select ugbod.user_id,
                ugbod.team_id,
                ugbod.order_id,
@@ -96,7 +96,7 @@
         limit #{count}
     </select>
 
-    <select id="queryRandomOngoingUserGroupBuyOrderDetail" parameterType="cn.cug.sxy.infrastructure.persistent.dao.po.UserGroupBuyOrderDetail" resultMap="dataMap">
+    <select id="queryRandomOngoingUserGroupBuyOrderDetail" parameterType="cn.cug.sxy.infrastructure.dao.po.UserGroupBuyOrderDetail" resultMap="dataMap">
         select ugbod.user_id,
                ugbod.team_id,
                ugbod.order_id,
@@ -125,7 +125,7 @@
         limit #{count}
     </select>
 
-    <insert id="insertGroupBuyOrderList" parameterType="cn.cug.sxy.infrastructure.persistent.dao.po.UserGroupBuyOrderDetail">
+    <insert id="insertGroupBuyOrderList" parameterType="cn.cug.sxy.infrastructure.dao.po.UserGroupBuyOrderDetail">
         insert into user_group_buy_order_detail(user_id, team_id, order_id, activity_id, start_time,
                                                 end_time, goods_id, source, channel, original_price, pay_price,
                                                 discount_deduction, status, out_trade_no, biz_id, create_time,
@@ -136,7 +136,7 @@
     </insert>
 
     <update id="updateUserGroupBuyOrderDetailStatus"
-            parameterType="cn.cug.sxy.infrastructure.persistent.dao.po.UserGroupBuyOrderDetail">
+            parameterType="cn.cug.sxy.infrastructure.dao.po.UserGroupBuyOrderDetail">
         update user_group_buy_order_detail
         set status      = #{status},
             out_trade_time = #{outTradeTime},
