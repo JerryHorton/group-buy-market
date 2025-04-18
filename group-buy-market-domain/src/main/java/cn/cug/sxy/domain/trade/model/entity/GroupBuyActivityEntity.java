@@ -1,10 +1,7 @@
 package cn.cug.sxy.domain.trade.model.entity;
 
 import cn.cug.sxy.domain.trade.model.valobj.GroupBuyActivityStatusVO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 

@@ -1,5 +1,6 @@
 package cn.cug.sxy.infrastructure.adaptor.repository;
 
+import cn.cug.sxy.domain.activity.model.valobj.GroupBuyActivityVO;
 import cn.cug.sxy.domain.trade.model.aggregate.GroupBuyOrderAggregate;
 import cn.cug.sxy.domain.trade.model.aggregate.TradePaySettlementAggregate;
 import cn.cug.sxy.domain.trade.model.entity.*;
@@ -39,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Repository
-public class TradeRepository implements ITradeRepository {
+public class TradeRepository extends AbstractRepository implements ITradeRepository {
 
     @Resource
     private IUserGroupBuyOrderDetailDao userGroupBuyOrderDetailDao;
@@ -92,7 +93,9 @@ public class TradeRepository implements ITradeRepository {
 
     @Override
     public GroupBuyActivityEntity queryGroupBuyActivityEntity(Long activityId) {
-        GroupBuyActivity groupBuyActivity = groupBuyActivityDao.queryGroupBuyActivityByActivityId(activityId);
+        String cacheKey = cacheKey(GroupBuyActivityEntity.class);
+        GroupBuyActivity groupBuyActivity = getDataFromCacheOrDB(cacheKey,
+                () -> groupBuyActivityDao.queryGroupBuyActivityByActivityId(activityId));
         if (null == groupBuyActivity) {
             return null;
         }

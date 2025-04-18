@@ -35,5 +35,11 @@
         where activity_id = #{activityId}
     </select>
 
+    <update id="updateActivity" parameterType="cn.cug.sxy.infrastructure.dao.po.GroupBuyActivity">
+        update group_buy_activity
+        set take_limit_count = #{takeLimitCount}
+        where activity_id = #{activityId}
+    </update>
+
 
 </mapper>

@@ -4,10 +4,12 @@ import cn.cug.sxy.domain.activity.model.entity.SCSkuActivityEntity;
 import cn.cug.sxy.domain.activity.model.entity.UserGroupBuyOrderDetailEntity;
 import cn.cug.sxy.domain.activity.model.valobj.*;
 import cn.cug.sxy.domain.activity.repository.IActivityRepository;
+import cn.cug.sxy.domain.trade.model.entity.GroupBuyActivityEntity;
 import cn.cug.sxy.infrastructure.dao.*;
 import cn.cug.sxy.infrastructure.dao.po.*;
 import cn.cug.sxy.infrastructure.dcc.IDCCService;
 import cn.cug.sxy.infrastructure.redis.IRedisService;
+import cn.cug.sxy.types.annotation.CacheRefresh;
 import cn.cug.sxy.types.common.Constants;
 import org.redisson.api.RBitSet;
 import org.springframework.stereotype.Repository;
@@ -24,7 +26,7 @@ import java.util.stream.Collectors;
  */
 
 @Repository
-public class ActivityRepository implements IActivityRepository {
+public class ActivityRepository extends AbstractRepository implements IActivityRepository {
 
     @Resource
     private IRedisService redisService;
@@ -195,6 +197,15 @@ public class ActivityRepository implements IActivityRepository {
     @Override
     public boolean cutRange(String userId) {
         return dccService.isCutRange(userId);
+    }
+
+    @CacheRefresh(type = GroupBuyActivityEntity.class)
+    @Override
+    public void updateActivityConfig(GroupBuyActivityEntity groupBuyActivityEntity) {
+        GroupBuyActivity groupBuyActivityReq = new GroupBuyActivity();
+        groupBuyActivityReq.setActivityId(groupBuyActivityEntity.getActivityId());
+        groupBuyActivityReq.setTakeLimitCount(groupBuyActivityEntity.getTakeLimitCount());
+        groupBuyActivityDao.updateActivity(groupBuyActivityReq);
     }
 
     private List<UserGroupBuyOrderDetailEntity> buildOngoingUserGroupBuyOrderDetailList(List<UserGroupBuyOrderDetail> userGroupBuyOrderDetailList) {

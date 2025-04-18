@@ -18,4 +18,6 @@ public interface IDCCService {
 
     Boolean isSCBlackListIntercept(String source, String channel);
 
+    boolean isCacheSwitch();
+
 }

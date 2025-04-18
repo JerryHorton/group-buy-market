@@ -26,6 +26,9 @@ public class DCCService implements IDCCService {
     @DCCValue("scBlackList:SOURCE_002-CHANNEL_002")
     private String scBlackList;
 
+    @DCCValue("cacheSwitch:1")
+    private String cacheSwitch;
+
     public Boolean isDegradeSwitch() {
         return "1".equals(degradeSwitch);
     }
@@ -41,6 +44,11 @@ public class DCCService implements IDCCService {
     public Boolean isSCBlackListIntercept(String source, String channel) {
         List<String> list = Arrays.asList(scBlackList.split(Constants.SPLIT));
         return list.contains(source + Constants.HYPHEN + channel);
+    }
+
+    @Override
+    public boolean isCacheSwitch() {
+        return "1".equals(cacheSwitch);
     }
 
 }

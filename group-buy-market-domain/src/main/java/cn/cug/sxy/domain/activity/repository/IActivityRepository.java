@@ -5,6 +5,7 @@ import cn.cug.sxy.domain.activity.model.entity.UserGroupBuyOrderDetailEntity;
 import cn.cug.sxy.domain.activity.model.valobj.GroupBuyActivityVO;
 import cn.cug.sxy.domain.activity.model.valobj.SkuVO;
 import cn.cug.sxy.domain.activity.model.valobj.TeamStatisticVO;
+import cn.cug.sxy.domain.trade.model.entity.GroupBuyActivityEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -33,5 +34,7 @@ public interface IActivityRepository {
     boolean degradeSwitch();
 
     boolean cutRange(String userId);
+
+    void updateActivityConfig(GroupBuyActivityEntity groupBuyActivityEntity);
 
 }
